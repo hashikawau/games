@@ -10,14 +10,14 @@ class TetrisTest {
     @Test
     fun field_init_isCorrect() {
         val field = Field(4, 6)
-        assertEquals(field.toString(), """
+        assertEquals("""
             |    |
             |    |
             |    |
             |    |
             |    |
             |    |
-        """.trimIndent())
+            """.trimIndent(), field.toString())
     }
 
     @Test
@@ -26,19 +26,19 @@ class TetrisTest {
         val block = Block1(field)
         block.moveTo(1, 5)
         block.fixToField()
-        assertEquals(field.toString(), """
+        assertEquals("""
             |    |
             |    |
             |    |
             |    |
             |    |
             | *  |
-        """.trimIndent())
+            """.trimIndent(), field.toString())
     }
 
     @Test
     fun block_moveToRightEnd_isCorrect() {
-        val field = Field(4, 6)
+        val field = Field(4, 1)
         val block = Block1(field)
         assertEquals(true, block.moveToRight())
         assertEquals(1, block.x)
@@ -52,13 +52,18 @@ class TetrisTest {
         assertEquals(false, block.moveToRight())
         assertEquals(3, block.x)
         assertEquals(0, block.y)
+        block.fixToField()
+        assertEquals("""
+            |   *|
+            """.trimIndent(), field.toString())
     }
 
     @Test
     fun block_moveToRightBlock_isCorrect() {
-        val field = with(Field(4, 6)) {
+        val field = with(Field(4, 1)) {
             val block = Block1(this)
-            while (block.moveToRight()) {}
+            while (block.moveToRight()) {
+            }
             block.fixToField()
             this
         }
@@ -72,6 +77,63 @@ class TetrisTest {
         assertEquals(false, block.moveToRight())
         assertEquals(2, block.x)
         assertEquals(0, block.y)
+        block.fixToField()
+        assertEquals("""
+            |  **|
+            """.trimIndent(), field.toString())
+    }
+
+    @Test
+    fun block_moveToLeftEnd_isCorrect() {
+        val field = Field(4, 1)
+        val block = with(Block1(field)) {
+            while (this.moveToRight()) {
+            }
+            this
+        }
+        assertEquals(true, block.moveToLeft())
+        assertEquals(2, block.x)
+        assertEquals(0, block.y)
+        assertEquals(true, block.moveToLeft())
+        assertEquals(1, block.x)
+        assertEquals(0, block.y)
+        assertEquals(true, block.moveToLeft())
+        assertEquals(0, block.x)
+        assertEquals(0, block.y)
+        assertEquals(false, block.moveToLeft())
+        assertEquals(0, block.x)
+        assertEquals(0, block.y)
+        block.fixToField()
+        assertEquals("""
+            |*   |
+            """.trimIndent(), field.toString())
+    }
+
+    @Test
+    fun block_moveToLeftBlock_isCorrect() {
+        val field = with(Field(4, 1)) {
+            val block = Block1(this)
+            block.fixToField()
+            this
+        }
+        val block = with(Block1(field)) {
+            while (this.moveToRight()) {
+            }
+            this
+        }
+        assertEquals(true, block.moveToLeft())
+        assertEquals(2, block.x)
+        assertEquals(0, block.y)
+        assertEquals(true, block.moveToLeft())
+        assertEquals(1, block.x)
+        assertEquals(0, block.y)
+        assertEquals(false, block.moveToLeft())
+        assertEquals(1, block.x)
+        assertEquals(0, block.y)
+        block.fixToField()
+        assertEquals("""
+            |**  |
+            """.trimIndent(), field.toString())
     }
 
 }

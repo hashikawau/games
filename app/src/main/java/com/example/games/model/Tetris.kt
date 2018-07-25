@@ -58,6 +58,10 @@ class Block1(
         _y = y
     }
 
+    fun fixToField() {
+        _field.setCell(_x, _y)
+    }
+
     fun moveToRight(): Boolean {
         if (_field.isEmpty(_x + 1, _y)) {
             ++_x;
@@ -67,8 +71,13 @@ class Block1(
         }
     }
 
-    fun fixToField() {
-        _field.setCell(_x, _y)
+    fun moveToLeft(): Boolean {
+        if (_field.isEmpty(_x - 1, _y)) {
+            --_x;
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
