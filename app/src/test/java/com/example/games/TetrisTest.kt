@@ -204,4 +204,41 @@ class TetrisTest {
             """.trimIndent(), field.toString())
     }
 
+    @Test
+    fun field_erase_isCorrect() {
+        val field = with(Field(4, 6)) {
+            with(Block1(this)) { moveTo(0, 5); fixToField() }
+            with(Block1(this)) { moveTo(1, 5); fixToField() }
+            with(Block1(this)) { moveTo(2, 5); fixToField() }
+            with(Block1(this)) { moveTo(3, 5); fixToField() }
+            with(Block1(this)) { moveTo(0, 4); fixToField() }
+            with(Block1(this)) { moveTo(1, 4); fixToField() }
+            with(Block1(this)) { moveTo(3, 4); fixToField() }
+            with(Block1(this)) { moveTo(0, 3); fixToField() }
+            with(Block1(this)) { moveTo(1, 3); fixToField() }
+            with(Block1(this)) { moveTo(2, 3); fixToField() }
+            with(Block1(this)) { moveTo(3, 3); fixToField() }
+            with(Block1(this)) { moveTo(0, 0); fixToField() }
+            with(Block1(this)) { moveTo(2, 0); fixToField() }
+            this
+        }
+        assertEquals("""
+            |* * |
+            |    |
+            |    |
+            |****|
+            |** *|
+            |****|
+            """.trimIndent(), field.toString())
+        field.erase()
+        assertEquals("""
+            |    |
+            |    |
+            |* * |
+            |    |
+            |    |
+            |** *|
+            """.trimIndent(), field.toString())
+    }
+
 }

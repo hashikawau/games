@@ -2,11 +2,7 @@ package com.example.games.model
 
 class Field(private val _width: Int, private val _height: Int) {
 
-    private val _array2d: Array<Array<Boolean>>
-
-    init {
-        _array2d = Array<Array<Boolean>>(_height, { Array<Boolean>(_width, { false }) })
-    }
+    private val _array2d: Array<Array<Boolean>> = Array(_height) { Array(_width) { false } }
 
     private fun isInRange(x: Int, y: Int): Boolean {
         if (x < 0 || x >= _width) {
@@ -28,6 +24,17 @@ class Field(private val _width: Int, private val _height: Int) {
             return ! _array2d[y][x]
         else
             return false
+    }
+
+    fun erase() {
+        val remains: List<Array<Boolean>> = _array2d.filter { row -> row.any { b -> ! b } }
+        val offset = _height - remains.size
+        for (y in 0 until(offset)) {
+            _array2d[y] = Array(_width) { false }
+        }
+        for (y in offset until(_height)) {
+            _array2d[y] = remains[y - offset]
+        }
     }
 
     override fun toString(): String {
