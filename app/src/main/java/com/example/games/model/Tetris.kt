@@ -1,11 +1,15 @@
 package com.example.games.model
 
-class Field(val _width: Int, val _height: Int) {
+class Field(private val _width: Int, private val _height: Int) {
 
-    val _array2d: Array<Array<Boolean>>
+    private val _array2d: Array<Array<Boolean>>
 
     init {
         _array2d = Array<Array<Boolean>>(_height, { Array<Boolean>(_width, { false }) })
+    }
+
+    fun fix(block: Block1) {
+        _array2d[block.x][block.y] = true
     }
 
     override fun toString(): String {
@@ -21,4 +25,21 @@ class Field(val _width: Int, val _height: Int) {
                     .joinToString("", "|", "|")
         }
     }
+}
+
+class Block1(
+        private val _field: Field,
+        private var _x: Int = 0,
+        private var _y: Int = 0)
+{
+    val x: Int get () = _x
+    val y: Int get () = _y
+
+    fun moveTo(x: Int, y: Int) {
+        _x = x
+        _y = y
+    }
+
+
+
 }
