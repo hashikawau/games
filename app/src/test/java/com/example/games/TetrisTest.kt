@@ -8,7 +8,7 @@ import org.junit.Assert.*
 
 class TetrisTest {
     @Test
-    fun field_size_isCorrect() {
+    fun field_init_isCorrect() {
         val field = Field(4, 6)
         assertEquals(field.toString(), """
             |    |
@@ -21,11 +21,11 @@ class TetrisTest {
     }
 
     @Test
-    fun field_block_isCorrect() {
+    fun field_fix_isCorrect() {
         val field = Field(4, 6)
-        val block_1 = Block1(field)
-        block_1.moveTo(5, 1)
-        field.fix(block_1)
+        val block = Block1(field)
+        block.moveTo(1, 5)
+        block.fixToField()
         assertEquals(field.toString(), """
             |    |
             |    |
@@ -35,4 +35,43 @@ class TetrisTest {
             | *  |
         """.trimIndent())
     }
+
+    @Test
+    fun block_moveToRightEnd_isCorrect() {
+        val field = Field(4, 6)
+        val block = Block1(field)
+        assertEquals(true, block.moveToRight())
+        assertEquals(1, block.x)
+        assertEquals(0, block.y)
+        assertEquals(true, block.moveToRight())
+        assertEquals(2, block.x)
+        assertEquals(0, block.y)
+        assertEquals(true, block.moveToRight())
+        assertEquals(3, block.x)
+        assertEquals(0, block.y)
+        assertEquals(false, block.moveToRight())
+        assertEquals(3, block.x)
+        assertEquals(0, block.y)
+    }
+
+    @Test
+    fun block_moveToRightBlock_isCorrect() {
+        val field = with(Field(4, 6)) {
+            val block = Block1(this)
+            while (block.moveToRight()) {}
+            block.fixToField()
+            this
+        }
+        val block = Block1(field)
+        assertEquals(true, block.moveToRight())
+        assertEquals(1, block.x)
+        assertEquals(0, block.y)
+        assertEquals(true, block.moveToRight())
+        assertEquals(2, block.x)
+        assertEquals(0, block.y)
+        assertEquals(false, block.moveToRight())
+        assertEquals(2, block.x)
+        assertEquals(0, block.y)
+    }
+
 }
