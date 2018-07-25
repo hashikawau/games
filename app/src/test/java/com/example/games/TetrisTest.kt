@@ -136,4 +136,72 @@ class TetrisTest {
             """.trimIndent(), field.toString())
     }
 
+    @Test
+    fun block_moveToDownEnd_isCorrect() {
+        val field = Field(1, 6)
+        val block = Block1(field)
+        assertEquals(true, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(1, block.y)
+        assertEquals(true, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(2, block.y)
+        assertEquals(true, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(3, block.y)
+        assertEquals(true, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(4, block.y)
+        assertEquals(true, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(5, block.y)
+        assertEquals(false, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(5, block.y)
+        block.fixToField()
+        assertEquals("""
+            | |
+            | |
+            | |
+            | |
+            | |
+            |*|
+            """.trimIndent(), field.toString())
+    }
+
+    @Test
+    fun block_moveToDownBlock_isCorrect() {
+        val field = with(Field(1, 6)) {
+            val block = Block1(this)
+            while (block.moveToDown()) {}
+            block.fixToField()
+            this
+        }
+        val block = Block1(field)
+        assertEquals(true, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(1, block.y)
+        assertEquals(true, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(2, block.y)
+        assertEquals(true, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(3, block.y)
+        assertEquals(true, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(4, block.y)
+        assertEquals(false, block.moveToDown())
+        assertEquals(0, block.x)
+        assertEquals(4, block.y)
+        block.fixToField()
+        assertEquals("""
+            | |
+            | |
+            | |
+            | |
+            |*|
+            |*|
+            """.trimIndent(), field.toString())
+    }
+
 }

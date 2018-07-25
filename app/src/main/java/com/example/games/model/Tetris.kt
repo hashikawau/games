@@ -10,12 +10,12 @@ class Field(private val _width: Int, private val _height: Int) {
 
     private fun isInRange(x: Int, y: Int): Boolean {
         if (x < 0 || x >= _width) {
-            return false;
+            return false
         }
         if (y < 0 || y >= _height) {
-            return false;
+            return false
         }
-        return true;
+        return true
     }
 
     fun setCell(x: Int, y: Int) {
@@ -64,19 +64,28 @@ class Block1(
 
     fun moveToRight(): Boolean {
         if (_field.isEmpty(_x + 1, _y)) {
-            ++_x;
-            return true;
+            ++_x
+            return true
         } else {
-            return false;
+            return false
         }
     }
 
     fun moveToLeft(): Boolean {
         if (_field.isEmpty(_x - 1, _y)) {
-            --_x;
-            return true;
+            --_x
+            return true
         } else {
-            return false;
+            return false
+        }
+    }
+
+    fun moveToDown(): Boolean {
+        if (_field.isEmpty(_x, _y + 1)) {
+            ++_y
+            return true
+        } else {
+            return false
         }
     }
 
