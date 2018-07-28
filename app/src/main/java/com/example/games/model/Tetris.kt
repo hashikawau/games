@@ -40,8 +40,9 @@ class Field(private val _width: Int, private val _height: Int) {
 //            0 -> return RectangleBlock(this, _width / 2 - 1, 0)
 //            1 -> return StraightBlock(this, _width / 2 - 1, 0)
 //            2 -> return GapLeftBlock(this, _width / 2 - 1, 0)
-            0 -> return GapRightBlock(this, _width / 2 - 1, 0)
-//            0 -> return HookLeftBlock(this, _width / 2 - 1, 0)
+//            3 -> return GapRightBlock(this, _width / 2 - 1, 0)
+//            4 -> return HookLeftBlock(this, _width / 2 - 1, 0)
+            0 -> return HookRightBlock(this, _width / 2 - 1, 0)
             else -> return MinimumBlock(this, _width / 2 - 1, 0)
         }
     }
