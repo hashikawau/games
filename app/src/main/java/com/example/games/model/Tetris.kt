@@ -1,7 +1,9 @@
 package com.example.games.model
 
 import android.support.constraint.solver.widgets.Rectangle
+import android.util.Log
 import com.example.games.model.blocks.*
+import java.util.*
 
 class Field(private val _width: Int, private val _height: Int) {
 
@@ -32,18 +34,17 @@ class Field(private val _width: Int, private val _height: Int) {
             return false
     }
 
-    var _counter = 0
+    private val _rand = Random(Date().time)
     fun newBlock(): IBlock {
-        val type = _counter
-        _counter = (_counter + 1) % 1
-        when (type) {
-//            0 -> return RectangleBlock(this, _width / 2 - 1, 0)
-//            1 -> return StraightBlock(this, _width / 2 - 1, 0)
-//            2 -> return GapLeftBlock(this, _width / 2 - 1, 0)
-//            3 -> return GapRightBlock(this, _width / 2 - 1, 0)
-//            4 -> return HookLeftBlock(this, _width / 2 - 1, 0)
-            0 -> return HookRightBlock(this, _width / 2 - 1, 0)
-            else -> return MinimumBlock(this, _width / 2 - 1, 0)
+        val type = _rand.nextInt(6)
+        return when (type) {
+            0 -> RectangleBlock(this, _width / 2 - 1, 0)
+            1 -> StraightBlock(this, _width / 2 - 1, 0)
+            2 -> GapLeftBlock(this, _width / 2 - 1, 0)
+            3 -> GapRightBlock(this, _width / 2 - 1, 0)
+            4 -> HookLeftBlock(this, _width / 2 - 1, 0)
+            5 -> HookRightBlock(this, _width / 2 - 1, 0)
+            else -> MinimumBlock(this, _width / 2 - 1, 0)
         }
     }
 
