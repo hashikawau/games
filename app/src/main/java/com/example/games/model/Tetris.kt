@@ -4,6 +4,7 @@ import android.support.constraint.solver.widgets.Rectangle
 import com.example.games.model.blocks.IBlock
 import com.example.games.model.blocks.MinimumBlock
 import com.example.games.model.blocks.RectangleBlock
+import com.example.games.model.blocks.StraightBlock
 
 class Field(private val _width: Int, private val _height: Int) {
 
@@ -37,10 +38,11 @@ class Field(private val _width: Int, private val _height: Int) {
     var _counter = 0
     fun newBlock(): IBlock {
         val type = _counter
-        _counter = (_counter + 1) % 1
+        _counter = (_counter + 1) % 2
         when (type) {
-            0 -> return RectangleBlock(this, _width / 2, 0)
-            else -> return MinimumBlock(this, _width / 2, 0)
+            0 -> return RectangleBlock(this, _width / 2 - 1, 0)
+            1 -> return StraightBlock(this, _width / 2 - 1, 0)
+            else -> return MinimumBlock(this, _width / 2 - 1, 0)
         }
     }
 

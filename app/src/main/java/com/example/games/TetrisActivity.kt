@@ -54,6 +54,12 @@ class TetrisActivity : AppCompatActivity() {
         }, _timeSpan, _timeSpan)
 
         //
+        findViewById<Button>(R.id.button_rotate_left).setOnClickListener { view ->
+            _currentBlock?.rotateLeft()
+        }
+        findViewById<Button>(R.id.button_rotate_right).setOnClickListener { view ->
+            _currentBlock?.rotateRight()
+        }
         findViewById<Button>(R.id.button_move_left).setOnClickListener { view ->
             _currentBlock?.moveToLeft()
         }
