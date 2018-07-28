@@ -6,8 +6,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TableLayout
 import android.widget.TableRow
-import com.example.games.model.Block1
 import com.example.games.model.Field
+import com.example.games.model.blocks.IBlock
 import java.util.*
 
 class TetrisActivity : AppCompatActivity() {
@@ -16,7 +16,7 @@ class TetrisActivity : AppCompatActivity() {
     private val _numY = 16
     private val _timeSpan = 1000L
     private val _tetrisField = Field(_numX, _numY)
-    private var _currentBlock: Block1? = null
+    private var _currentBlock: IBlock? = null
     private var _buttons = Array(0) { Array(0) { Button(null) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,6 +66,8 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun update() {
+        _currentBlock = _currentBlock ?: _tetrisField.newBlock()
+
         runOnUiThread {
             for (y in 0 until _numY) {
                 for (x in 0 until _numX) {
@@ -75,17 +77,17 @@ class TetrisActivity : AppCompatActivity() {
                         _buttons!![y][x].setBackgroundColor(Color.WHITE)
                 }
             }
-            _currentBlock = _currentBlock ?: Block1(_tetrisField, 4, 0)
-            _buttons!![_currentBlock!!.y][_currentBlock!!.x].setBackgroundColor(Color.BLUE)
+
+            for (p in _currentBlock?.positions() ?: arrayOf())
+                _buttons!![p.y][p.x].setBackgroundColor(Color.BLUE)
         }
     }
 
     private fun down() {
-        if (_currentBlock?.moveToDown()!!.not()) {
+        if (_currentBlock?.moveToDown()?.not() ?: false) {
             _currentBlock?.fixToField()
             _tetrisField.erase()
-
-            _currentBlock = Block1(_tetrisField, 4, 0)
+            _currentBlock = null
         }
     }
 

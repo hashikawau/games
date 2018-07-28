@@ -1,5 +1,10 @@
 package com.example.games.model
 
+import android.support.constraint.solver.widgets.Rectangle
+import com.example.games.model.blocks.IBlock
+import com.example.games.model.blocks.MinimumBlock
+import com.example.games.model.blocks.RectangleBlock
+
 class Field(private val _width: Int, private val _height: Int) {
 
     private val _array2d: Array<Array<Boolean>> = Array(_height) { Array(_width) { false } }
@@ -24,18 +29,28 @@ class Field(private val _width: Int, private val _height: Int) {
 
     fun isEmpty(x: Int, y: Int): Boolean {
         if (isInRange(x, y))
-            return ! _array2d[y][x]
+            return !_array2d[y][x]
         else
             return false
     }
 
+    var _counter = 0
+    fun newBlock(): IBlock {
+        val type = _counter
+        _counter = (_counter + 1) % 1
+        when (type) {
+            0 -> return RectangleBlock(this, _width / 2, 0)
+            else -> return MinimumBlock(this, _width / 2, 0)
+        }
+    }
+
     fun erase() {
-        val remains: List<Array<Boolean>> = _array2d.filter { row -> row.any { b -> ! b } }
+        val remains: List<Array<Boolean>> = _array2d.filter { row -> row.any { b -> !b } }
         val offset = _height - remains.size
-        for (y in 0 until(offset)) {
+        for (y in 0 until (offset)) {
             _array2d[y] = Array(_width) { false }
         }
-        for (y in offset until(_height)) {
+        for (y in offset until (_height)) {
             _array2d[y] = remains[y - offset]
         }
     }
@@ -49,55 +64,8 @@ class Field(private val _width: Int, private val _height: Int) {
     companion object {
         private fun outputString(row: Array<Boolean>): String {
             return row
-                    .map {b -> if (b) "*" else " " }
+                    .map { b -> if (b) "*" else " " }
                     .joinToString("", "|", "|")
         }
     }
-}
-
-class Block1(
-        private val _field: Field,
-        private var _x: Int = 0,
-        private var _y: Int = 0)
-{
-    val x: Int get () = _x
-    val y: Int get () = _y
-
-    fun moveTo(x: Int, y: Int) {
-        _x = x
-        _y = y
-    }
-
-    fun fixToField() {
-        _field.setCell(_x, _y)
-    }
-
-    fun moveToRight(): Boolean {
-        if (_field.isEmpty(_x + 1, _y)) {
-            ++_x
-            return true
-        } else {
-            return false
-        }
-    }
-
-    fun moveToLeft(): Boolean {
-        if (_field.isEmpty(_x - 1, _y)) {
-            --_x
-            return true
-        } else {
-            return false
-        }
-    }
-
-    fun moveToDown(): Boolean {
-        if (_field.isEmpty(_x, _y + 1)) {
-            ++_y
-            return true
-        } else {
-            return false
-        }
-    }
-
-
 }
