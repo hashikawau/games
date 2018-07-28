@@ -6,7 +6,7 @@ import org.junit.Test
 
 import org.junit.Assert.*
 
-class TetrisTest {
+class TetrisModelTest {
     @Test
     fun field_init_isCorrect() {
         val field = Field(4, 6)

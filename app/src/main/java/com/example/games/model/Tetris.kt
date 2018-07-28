@@ -4,6 +4,9 @@ class Field(private val _width: Int, private val _height: Int) {
 
     private val _array2d: Array<Array<Boolean>> = Array(_height) { Array(_width) { false } }
 
+    val array2d
+        get() = _array2d
+
     private fun isInRange(x: Int, y: Int): Boolean {
         if (x < 0 || x >= _width) {
             return false
