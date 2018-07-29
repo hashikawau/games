@@ -3,9 +3,10 @@ package com.example.games.model.blocks
 import com.example.games.model.Field
 
 class SingleBlock(
-        private val _field: Field,
-        private var _x: Int = 0,
-        private var _y: Int = 0) : IBlock {
+        field: Field,
+        x: Int = 0,
+        y: Int = 0
+) : AbstractBlock(field, x, y) {
     val x: Int get () = _x
     val y: Int get () = _y
 
@@ -16,37 +17,6 @@ class SingleBlock(
 
     override fun positions(): Array<Position> {
         return arrayOf(Position(_x, _y))
-    }
-
-    override fun fixToField(): Unit {
-        _field.setCell(_x, _y)
-    }
-
-    override fun moveToRight(): Boolean {
-        if (_field.isEmpty(_x + 1, _y)) {
-            ++_x
-            return true
-        } else {
-            return false
-        }
-    }
-
-    override fun moveToLeft(): Boolean {
-        if (_field.isEmpty(_x - 1, _y)) {
-            --_x
-            return true
-        } else {
-            return false
-        }
-    }
-
-    override fun moveToDown(): Boolean {
-        if (_field.isEmpty(_x, _y + 1)) {
-            ++_y
-            return true
-        } else {
-            return false
-        }
     }
 
     override fun rotateRight(): Boolean {
