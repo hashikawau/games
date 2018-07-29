@@ -2,7 +2,12 @@ package com.example.games.model.blocks
 
 import com.example.games.model.Field
 
-class StraightBlock(private val _field: Field, private var _x: Int = 0, private var _y: Int = 0) : IBlock {
+class StraightBlock(
+        field: Field,
+        x: Int = 0,
+        y: Int = 0
+) : AbstractBlock(field, x, y) {
+
     private var _state: IStraightBlock = VerticalStraightBlock(_field, _x, _y)
 
     override fun positions(): Array<Position> {
@@ -27,7 +32,7 @@ class StraightBlock(private val _field: Field, private var _x: Int = 0, private 
 
     override fun rotateRight(): Boolean {
         val rotated = _state.rotatedRight()
-        val canRotate = rotated.positions().all {p -> _field.isEmpty(p.x, p.y)}
+        val canRotate = rotated.positions().all { p -> _field.isEmpty(p.x, p.y) }
         if (canRotate) {
             _state = rotated
         }
@@ -36,7 +41,7 @@ class StraightBlock(private val _field: Field, private var _x: Int = 0, private 
 
     override fun rotateLeft(): Boolean {
         val rotated = _state.rotatedLeft()
-        val canRotate = rotated.positions().all {p -> _field.isEmpty(p.x, p.y)}
+        val canRotate = rotated.positions().all { p -> _field.isEmpty(p.x, p.y) }
         if (canRotate) {
             _state = rotated
         }
@@ -44,58 +49,26 @@ class StraightBlock(private val _field: Field, private var _x: Int = 0, private 
     }
 }
 
-private interface IStraightBlock : IBlock {
-    fun rotatedRight(): IStraightBlock
-    fun rotatedLeft(): IStraightBlock
+private abstract class IStraightBlock(
+        field: Field,
+        x: Int,
+        y: Int
+) : AbstractBlock(field, x, y) {
+    abstract fun rotatedRight(): IStraightBlock
+    abstract fun rotatedLeft(): IStraightBlock
 }
 
-private class VerticalStraightBlock(private val _field: Field, private var _x: Int, private var _y: Int) : IStraightBlock {
+private class VerticalStraightBlock(
+        field: Field,
+        x: Int,
+        y: Int
+) : IStraightBlock(field, x, y) {
     override fun positions(): Array<Position> {
         return arrayOf(
                 Position(_x, _y),
                 Position(_x, _y + 1),
                 Position(_x, _y + 2),
                 Position(_x, _y + 3))
-    }
-
-    override fun fixToField(): Unit {
-        _field.setCell(_x, _y)
-        _field.setCell(_x, _y + 1)
-        _field.setCell(_x, _y + 2)
-        _field.setCell(_x, _y + 3)
-    }
-
-    override fun moveToRight(): Boolean {
-        if (_field.isEmpty(_x + 1, _y)
-                and _field.isEmpty(_x + 1, _y + 1)
-                and _field.isEmpty(_x + 1, _y + 2)
-                and _field.isEmpty(_x + 1, _y + 3)) {
-            ++_x
-            return true
-        } else {
-            return false
-        }
-    }
-
-    override fun moveToLeft(): Boolean {
-        if (_field.isEmpty(_x - 1, _y)
-                and _field.isEmpty(_x - 1, _y + 1)
-                and _field.isEmpty(_x - 1, _y + 2)
-                and _field.isEmpty(_x - 1, _y + 3)) {
-            --_x
-            return true
-        } else {
-            return false
-        }
-    }
-
-    override fun moveToDown(): Boolean {
-        if (_field.isEmpty(_x, _y + 4)) {
-            ++_y
-            return true
-        } else {
-            return false
-        }
     }
 
     override fun rotateRight(): Boolean {
@@ -116,50 +89,17 @@ private class VerticalStraightBlock(private val _field: Field, private var _x: I
 
 }
 
-private class HorizontalStraightBlock(private val _field: Field, private var _x: Int, private var _y: Int) : IStraightBlock {
+private class HorizontalStraightBlock(
+        field: Field,
+        x: Int,
+        y: Int
+) : IStraightBlock(field, x, y) {
     override fun positions(): Array<Position> {
         return arrayOf(
                 Position(_x - 1, _y),
                 Position(_x + 0, _y),
                 Position(_x + 1, _y),
                 Position(_x + 2, _y))
-    }
-
-    override fun fixToField(): Unit {
-        _field.setCell(_x - 1, _y)
-        _field.setCell(_x + 0, _y)
-        _field.setCell(_x + 1, _y)
-        _field.setCell(_x + 2, _y)
-    }
-
-    override fun moveToRight(): Boolean {
-        if (_field.isEmpty(_x + 3, _y)) {
-            ++_x
-            return true
-        } else {
-            return false
-        }
-    }
-
-    override fun moveToLeft(): Boolean {
-        if (_field.isEmpty(_x - 2, _y)) {
-            --_x
-            return true
-        } else {
-            return false
-        }
-    }
-
-    override fun moveToDown(): Boolean {
-        if (_field.isEmpty(_x - 1, _y + 1)
-                and _field.isEmpty(_x + 0, _y + 1)
-                and _field.isEmpty(_x + 1, _y + 1)
-                and _field.isEmpty(_x + 2, _y + 1)) {
-            ++_y
-            return true
-        } else {
-            return false
-        }
     }
 
     override fun rotateRight(): Boolean {

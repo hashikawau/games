@@ -7,6 +7,7 @@ class RectangleBlock(
         x: Int = 0,
         y: Int = 0
 ) : AbstractBlock(field, x, y) {
+
     override fun positions(): Array<Position> {
         return arrayOf(
                 Position(_x + 0, _y + 0),
