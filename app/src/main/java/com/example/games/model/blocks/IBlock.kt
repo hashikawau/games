@@ -10,4 +10,11 @@ interface IBlock {
     fun rotateLeft(): Boolean
 }
 
-class Position(val x: Int, val y: Int)
+class Position(val x: Int, val y: Int) {
+    fun rotateRight(): Position {
+        return Position(y, -x)
+    }
+    fun rotateLeft(): Position {
+        return Position(-y, x)
+    }
+}

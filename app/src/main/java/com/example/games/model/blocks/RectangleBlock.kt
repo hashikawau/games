@@ -8,19 +8,12 @@ class RectangleBlock(
         y: Int = 0
 ) : AbstractBlock(field, x, y) {
 
-    override fun positions(): Array<Position> {
+    override fun shapes(): Array<Array<Position>> {
         return arrayOf(
-                Position(_x + 0, _y + 0),
-                Position(_x + 0, _y + 1),
-                Position(_x + 1, _y + 0),
-                Position(_x + 1, _y + 1))
-    }
-
-    override fun rotateRight(): Boolean {
-        return true
-    }
-
-    override fun rotateLeft(): Boolean {
-        return true
+                arrayOf(Position(0, 0),
+                        Position(0, 1),
+                        Position(1, 0),
+                        Position(1, 1))
+        )
     }
 }

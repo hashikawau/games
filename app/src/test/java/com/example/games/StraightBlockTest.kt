@@ -8,29 +8,7 @@ import org.junit.Before
 import org.junit.Test
 
 class StraightBlockTest {
-    private val _width = 3
-    private val _height = 6
-    private var _field: Field = Field(_width, _height)
-
-    @Before
-    fun before() {
-        _field = Field(_width, _height)
-    }
-
-    @Test
-    fun block_init_isCorrect() {
-        StraightBlock(_field, 1, 1).fixToField()
-        assertEquals("""
-            |   |
-            | * |
-            | * |
-            | * |
-            | * |
-            |   |
-            """.trimIndent(), _field.toString())
-    }
-
-    class MoveToRightTest {
+    class VerticalStraightBlockTest {
         private val _width = 3
         private val _height = 6
         private var _field: Field = Field(_width, _height)
@@ -41,52 +19,75 @@ class StraightBlockTest {
         }
 
         @Test
-        fun canMove() {
-            SingleBlock(_field, 2, 0).fixToField()
-            SingleBlock(_field, 2, 5).fixToField()
-            assertEquals("""
-            |  *|
-            |   |
-            |   |
-            |   |
-            |   |
-            |  *|
-            """.trimIndent(), _field.toString())
-
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(true, block.moveToRight())
-
-            block.fixToField()
-            assertEquals("""
-            |  *|
-            |  *|
-            |  *|
-            |  *|
-            |  *|
-            |  *|
-            """.trimIndent(), _field.toString())
-        }
-
-        @Test
-        fun cannotMove_exceedWall() {
-            val block = StraightBlock(_field, 2, 1)
-            assertEquals(false, block.moveToRight())
-
-            block.fixToField()
+        fun block_init_isCorrect() {
+            StraightBlock(_field, 1, 1).fixToField()
             assertEquals("""
             |   |
-            |  *|
-            |  *|
-            |  *|
-            |  *|
+            | * |
+            | * |
+            | * |
+            | * |
             |   |
             """.trimIndent(), _field.toString())
         }
 
-        @Test
-        fun cannotMove_exceedBlock_1() {
-            SingleBlock(_field, 2, 1).fixToField()
-            assertEquals("""
+        class MoveToRightTest {
+            private val _width = 3
+            private val _height = 6
+            private var _field: Field = Field(_width, _height)
+
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canMove() {
+                SingleBlock(_field, 2, 0).fixToField()
+                SingleBlock(_field, 2, 5).fixToField()
+                assertEquals("""
+            |  *|
+            |   |
+            |   |
+            |   |
+            |   |
+            |  *|
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(true, block.moveToRight())
+
+                block.fixToField()
+                assertEquals("""
+            |  *|
+            |  *|
+            |  *|
+            |  *|
+            |  *|
+            |  *|
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall() {
+                val block = StraightBlock(_field, 2, 1)
+                assertEquals(false, block.moveToRight())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            |  *|
+            |  *|
+            |  *|
+            |  *|
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_1() {
+                SingleBlock(_field, 2, 1).fixToField()
+                assertEquals("""
             |   |
             |  *|
             |   |
@@ -95,11 +96,11 @@ class StraightBlockTest {
             |   |
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(false, block.moveToRight())
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToRight())
 
-            block.fixToField()
-            assertEquals("""
+                block.fixToField()
+                assertEquals("""
             |   |
             | **|
             | * |
@@ -107,12 +108,12 @@ class StraightBlockTest {
             | * |
             |   |
             """.trimIndent(), _field.toString())
-        }
+            }
 
-        @Test
-        fun cannotMove_exceedBlock_2() {
-            SingleBlock(_field, 2, 2).fixToField()
-            assertEquals("""
+            @Test
+            fun cannotMove_exceedBlock_2() {
+                SingleBlock(_field, 2, 2).fixToField()
+                assertEquals("""
             |   |
             |   |
             |  *|
@@ -121,11 +122,11 @@ class StraightBlockTest {
             |   |
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(false, block.moveToRight())
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToRight())
 
-            block.fixToField()
-            assertEquals("""
+                block.fixToField()
+                assertEquals("""
             |   |
             | * |
             | **|
@@ -133,12 +134,12 @@ class StraightBlockTest {
             | * |
             |   |
             """.trimIndent(), _field.toString())
-        }
+            }
 
-        @Test
-        fun cannotMove_exceedBlock_3() {
-            SingleBlock(_field, 2, 3).fixToField()
-            assertEquals("""
+            @Test
+            fun cannotMove_exceedBlock_3() {
+                SingleBlock(_field, 2, 3).fixToField()
+                assertEquals("""
             |   |
             |   |
             |   |
@@ -147,11 +148,11 @@ class StraightBlockTest {
             |   |
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(false, block.moveToRight())
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToRight())
 
-            block.fixToField()
-            assertEquals("""
+                block.fixToField()
+                assertEquals("""
             |   |
             | * |
             | * |
@@ -159,12 +160,12 @@ class StraightBlockTest {
             | * |
             |   |
             """.trimIndent(), _field.toString())
-        }
+            }
 
-        @Test
-        fun cannotMove_exceedBlock_4() {
-            SingleBlock(_field, 2, 4).fixToField()
-            assertEquals("""
+            @Test
+            fun cannotMove_exceedBlock_4() {
+                SingleBlock(_field, 2, 4).fixToField()
+                assertEquals("""
             |   |
             |   |
             |   |
@@ -173,11 +174,11 @@ class StraightBlockTest {
             |   |
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(false, block.moveToRight())
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToRight())
 
-            block.fixToField()
-            assertEquals("""
+                block.fixToField()
+                assertEquals("""
             |   |
             | * |
             | * |
@@ -185,66 +186,784 @@ class StraightBlockTest {
             | **|
             |   |
             """.trimIndent(), _field.toString())
+            }
+        }
+
+        class MoveToLeftTest {
+            private val _width = 3
+            private val _height = 6
+            private var _field: Field = Field(_width, _height)
+
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canMove() {
+                SingleBlock(_field, 0, 0).fixToField()
+                SingleBlock(_field, 0, 5).fixToField()
+                assertEquals("""
+            |*  |
+            |   |
+            |   |
+            |   |
+            |   |
+            |*  |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(true, block.moveToLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |*  |
+            |*  |
+            |*  |
+            |*  |
+            |*  |
+            |*  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall() {
+                val block = StraightBlock(_field, 0, 1)
+                assertEquals(false, block.moveToLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            |*  |
+            |*  |
+            |*  |
+            |*  |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_1() {
+                SingleBlock(_field, 0, 1).fixToField()
+                assertEquals("""
+            |   |
+            |*  |
+            |   |
+            |   |
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            |** |
+            | * |
+            | * |
+            | * |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_2() {
+                SingleBlock(_field, 0, 2).fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |*  |
+            |   |
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            | * |
+            |** |
+            | * |
+            | * |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_3() {
+                SingleBlock(_field, 0, 3).fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |*  |
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            | * |
+            | * |
+            |** |
+            | * |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_4() {
+                SingleBlock(_field, 0, 4).fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |   |
+            |*  |
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            | * |
+            | * |
+            | * |
+            |** |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+        }
+
+        class MoveToDownTest {
+            private val _width = 3
+            private val _height = 9
+            private var _field: Field = Field(_width, _height)
+
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canMove() {
+                SingleBlock(_field, 0, 5).fixToField()
+                SingleBlock(_field, 0, 6).fixToField()
+                SingleBlock(_field, 0, 7).fixToField()
+                SingleBlock(_field, 0, 8).fixToField()
+                SingleBlock(_field, 2, 5).fixToField()
+                SingleBlock(_field, 2, 6).fixToField()
+                SingleBlock(_field, 2, 7).fixToField()
+                SingleBlock(_field, 2, 8).fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |   |
+            |   |
+            |* *|
+            |* *|
+            |* *|
+            |* *|
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(true, block.moveToDown())
+                assertEquals(true, block.moveToDown())
+                assertEquals(true, block.moveToDown())
+                assertEquals(true, block.moveToDown())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |   |
+            |   |
+            |***|
+            |***|
+            |***|
+            |***|
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedGround() {
+                val block = StraightBlock(_field, 1, 5)
+                assertEquals(false, block.moveToDown())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |   |
+            |   |
+            | * |
+            | * |
+            | * |
+            | * |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_1() {
+                SingleBlock(_field, 1, 5).fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |   |
+            |   |
+            | * |
+            |   |
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToDown())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            | * |
+            | * |
+            | * |
+            | * |
+            | * |
+            |   |
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+        }
+
+        class RotateRightTest {
+            private val _width = 4
+            private val _height = 4
+            private var _field: Field = Field(_width, _height)
+
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canRotate() {
+                SingleBlock(_field, 0, 0).fixToField()
+                SingleBlock(_field, 0, 2).fixToField()
+                SingleBlock(_field, 0, 3).fixToField()
+                SingleBlock(_field, 2, 0).fixToField()
+                SingleBlock(_field, 2, 2).fixToField()
+                SingleBlock(_field, 2, 3).fixToField()
+                SingleBlock(_field, 3, 0).fixToField()
+                SingleBlock(_field, 3, 2).fixToField()
+                SingleBlock(_field, 3, 3).fixToField()
+                assertEquals("""
+            |* **|
+            |    |
+            |* **|
+            |* **|
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(true, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            |* **|
+            |****|
+            |* **|
+            |* **|
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall_1() {
+                val block = StraightBlock(_field, 2, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            |  * |
+            |  * |
+            |  * |
+            |  * |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall_2() {
+                val block = StraightBlock(_field, 0, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            |*   |
+            |*   |
+            |*   |
+            |*   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_1() {
+                SingleBlock(_field, 0, 1).fixToField()
+                assertEquals("""
+            |    |
+            |*   |
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            |**  |
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_2() {
+                SingleBlock(_field, 2, 1).fixToField()
+                assertEquals("""
+            |    |
+            |  * |
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            | ** |
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_3() {
+                SingleBlock(_field, 3, 1).fixToField()
+                assertEquals("""
+            |    |
+            |   *|
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            | * *|
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
+        }
+
+        class RotateLeftTest {
+            private val _width = 4
+            private val _height = 4
+            private var _field: Field = Field(_width, _height)
+
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canRotate() {
+                SingleBlock(_field, 0, 0).fixToField()
+                SingleBlock(_field, 0, 2).fixToField()
+                SingleBlock(_field, 0, 3).fixToField()
+                SingleBlock(_field, 2, 0).fixToField()
+                SingleBlock(_field, 2, 2).fixToField()
+                SingleBlock(_field, 2, 3).fixToField()
+                SingleBlock(_field, 3, 0).fixToField()
+                SingleBlock(_field, 3, 2).fixToField()
+                SingleBlock(_field, 3, 3).fixToField()
+                assertEquals("""
+            |* **|
+            |    |
+            |* **|
+            |* **|
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(true, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |* **|
+            |****|
+            |* **|
+            |* **|
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall_1() {
+                val block = StraightBlock(_field, 2, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |  * |
+            |  * |
+            |  * |
+            |  * |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall_2() {
+                val block = StraightBlock(_field, 0, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |*   |
+            |*   |
+            |*   |
+            |*   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_1() {
+                SingleBlock(_field, 0, 1).fixToField()
+                assertEquals("""
+            |    |
+            |*   |
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            |**  |
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_2() {
+                SingleBlock(_field, 2, 1).fixToField()
+                assertEquals("""
+            |    |
+            |  * |
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            | ** |
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_3() {
+                SingleBlock(_field, 3, 1).fixToField()
+                assertEquals("""
+            |    |
+            |   *|
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            | * *|
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
         }
     }
 
-    class MoveToLeftTest {
+    class HorizontalStraightBlockTest {
         private val _width = 3
         private val _height = 6
-        private var _field: Field = Field(_width, _height)
+        private var _field = Field(_width, _height)
+        private var _block = StraightBlock(_field)
 
         @Before
         fun before() {
             _field = Field(_width, _height)
+            _block = StraightBlock(_field)
         }
 
         @Test
-        fun canMove() {
-            SingleBlock(_field, 0, 0).fixToField()
-            SingleBlock(_field, 0, 5).fixToField()
-            assertEquals("""
-            |*  |
-            |   |
-            |   |
-            |   |
-            |   |
-            |*  |
-            """.trimIndent(), _field.toString())
-
+        fun block_init_isCorrect() {
             val block = StraightBlock(_field, 1, 1)
-            assertEquals(true, block.moveToLeft())
-
-            block.fixToField()
-            assertEquals("""
-            |*  |
-            |*  |
-            |*  |
-            |*  |
-            |*  |
-            |*  |
-            """.trimIndent(), _field.toString())
-        }
-
-        @Test
-        fun cannotMove_exceedWall() {
-            val block = StraightBlock(_field, 0, 1)
-            assertEquals(false, block.moveToLeft())
-
+            block.rotateRight()
             block.fixToField()
             assertEquals("""
             |   |
-            |*  |
-            |*  |
-            |*  |
-            |*  |
+            | * |
+            | * |
+            | * |
+            | * |
             |   |
             """.trimIndent(), _field.toString())
         }
 
-        @Test
-        fun cannotMove_exceedBlock_1() {
-            SingleBlock(_field, 0, 1).fixToField()
-            assertEquals("""
+        class MoveToRightTest {
+            private val _width = 3
+            private val _height = 6
+            private var _field: Field = Field(_width, _height)
+
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canMove() {
+                SingleBlock(_field, 2, 0).fixToField()
+                SingleBlock(_field, 2, 5).fixToField()
+                assertEquals("""
+            |  *|
+            |   |
+            |   |
+            |   |
+            |   |
+            |  *|
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(true, block.moveToRight())
+
+                block.fixToField()
+                assertEquals("""
+            |  *|
+            |  *|
+            |  *|
+            |  *|
+            |  *|
+            |  *|
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall() {
+                val block = StraightBlock(_field, 2, 1)
+                assertEquals(false, block.moveToRight())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            |  *|
+            |  *|
+            |  *|
+            |  *|
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_1() {
+                SingleBlock(_field, 2, 1).fixToField()
+                assertEquals("""
+            |   |
+            |  *|
+            |   |
+            |   |
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToRight())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            | **|
+            | * |
+            | * |
+            | * |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_2() {
+                SingleBlock(_field, 2, 2).fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |  *|
+            |   |
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToRight())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            | * |
+            | **|
+            | * |
+            | * |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_3() {
+                SingleBlock(_field, 2, 3).fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |  *|
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToRight())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            | * |
+            | * |
+            | **|
+            | * |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_4() {
+                SingleBlock(_field, 2, 4).fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |   |
+            |  *|
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToRight())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            | * |
+            | * |
+            | * |
+            | **|
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+        }
+
+        class MoveToLeftTest {
+            private val _width = 3
+            private val _height = 6
+            private var _field: Field = Field(_width, _height)
+
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canMove() {
+                SingleBlock(_field, 0, 0).fixToField()
+                SingleBlock(_field, 0, 5).fixToField()
+                assertEquals("""
+            |*  |
+            |   |
+            |   |
+            |   |
+            |   |
+            |*  |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(true, block.moveToLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |*  |
+            |*  |
+            |*  |
+            |*  |
+            |*  |
+            |*  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall() {
+                val block = StraightBlock(_field, 0, 1)
+                assertEquals(false, block.moveToLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            |*  |
+            |*  |
+            |*  |
+            |*  |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_1() {
+                SingleBlock(_field, 0, 1).fixToField()
+                assertEquals("""
             |   |
             |*  |
             |   |
@@ -253,11 +972,11 @@ class StraightBlockTest {
             |   |
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(false, block.moveToLeft())
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToLeft())
 
-            block.fixToField()
-            assertEquals("""
+                block.fixToField()
+                assertEquals("""
             |   |
             |** |
             | * |
@@ -265,12 +984,12 @@ class StraightBlockTest {
             | * |
             |   |
             """.trimIndent(), _field.toString())
-        }
+            }
 
-        @Test
-        fun cannotMove_exceedBlock_2() {
-            SingleBlock(_field, 0, 2).fixToField()
-            assertEquals("""
+            @Test
+            fun cannotMove_exceedBlock_2() {
+                SingleBlock(_field, 0, 2).fixToField()
+                assertEquals("""
             |   |
             |   |
             |*  |
@@ -279,11 +998,11 @@ class StraightBlockTest {
             |   |
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(false, block.moveToLeft())
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToLeft())
 
-            block.fixToField()
-            assertEquals("""
+                block.fixToField()
+                assertEquals("""
             |   |
             | * |
             |** |
@@ -291,12 +1010,12 @@ class StraightBlockTest {
             | * |
             |   |
             """.trimIndent(), _field.toString())
-        }
+            }
 
-        @Test
-        fun cannotMove_exceedBlock_3() {
-            SingleBlock(_field, 0, 3).fixToField()
-            assertEquals("""
+            @Test
+            fun cannotMove_exceedBlock_3() {
+                SingleBlock(_field, 0, 3).fixToField()
+                assertEquals("""
             |   |
             |   |
             |   |
@@ -305,11 +1024,11 @@ class StraightBlockTest {
             |   |
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(false, block.moveToLeft())
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToLeft())
 
-            block.fixToField()
-            assertEquals("""
+                block.fixToField()
+                assertEquals("""
             |   |
             | * |
             | * |
@@ -317,12 +1036,12 @@ class StraightBlockTest {
             | * |
             |   |
             """.trimIndent(), _field.toString())
-        }
+            }
 
-        @Test
-        fun cannotMove_exceedBlock_4() {
-            SingleBlock(_field, 0, 4).fixToField()
-            assertEquals("""
+            @Test
+            fun cannotMove_exceedBlock_4() {
+                SingleBlock(_field, 0, 4).fixToField()
+                assertEquals("""
             |   |
             |   |
             |   |
@@ -331,11 +1050,11 @@ class StraightBlockTest {
             |   |
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(false, block.moveToLeft())
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToLeft())
 
-            block.fixToField()
-            assertEquals("""
+                block.fixToField()
+                assertEquals("""
             |   |
             | * |
             | * |
@@ -343,30 +1062,30 @@ class StraightBlockTest {
             |** |
             |   |
             """.trimIndent(), _field.toString())
-        }
-    }
-
-    class MoveToDownTest {
-        private val _width = 3
-        private val _height = 9
-        private var _field: Field = Field(_width, _height)
-
-        @Before
-        fun before() {
-            _field = Field(_width, _height)
+            }
         }
 
-        @Test
-        fun canMove() {
-            SingleBlock(_field, 0, 5).fixToField()
-            SingleBlock(_field, 0, 6).fixToField()
-            SingleBlock(_field, 0, 7).fixToField()
-            SingleBlock(_field, 0, 8).fixToField()
-            SingleBlock(_field, 2, 5).fixToField()
-            SingleBlock(_field, 2, 6).fixToField()
-            SingleBlock(_field, 2, 7).fixToField()
-            SingleBlock(_field, 2, 8).fixToField()
-            assertEquals("""
+        class MoveToDownTest {
+            private val _width = 3
+            private val _height = 9
+            private var _field: Field = Field(_width, _height)
+
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canMove() {
+                SingleBlock(_field, 0, 5).fixToField()
+                SingleBlock(_field, 0, 6).fixToField()
+                SingleBlock(_field, 0, 7).fixToField()
+                SingleBlock(_field, 0, 8).fixToField()
+                SingleBlock(_field, 2, 5).fixToField()
+                SingleBlock(_field, 2, 6).fixToField()
+                SingleBlock(_field, 2, 7).fixToField()
+                SingleBlock(_field, 2, 8).fixToField()
+                assertEquals("""
             |   |
             |   |
             |   |
@@ -378,14 +1097,14 @@ class StraightBlockTest {
             |* *|
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(true, block.moveToDown())
-            assertEquals(true, block.moveToDown())
-            assertEquals(true, block.moveToDown())
-            assertEquals(true, block.moveToDown())
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(true, block.moveToDown())
+                assertEquals(true, block.moveToDown())
+                assertEquals(true, block.moveToDown())
+                assertEquals(true, block.moveToDown())
 
-            block.fixToField()
-            assertEquals("""
+                block.fixToField()
+                assertEquals("""
             |   |
             |   |
             |   |
@@ -396,57 +1115,328 @@ class StraightBlockTest {
             |***|
             |***|
             """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedGround() {
+                val block = StraightBlock(_field, 1, 5)
+                assertEquals(false, block.moveToDown())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |   |
+            |   |
+            | * |
+            | * |
+            | * |
+            | * |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedBlock_1() {
+                SingleBlock(_field, 1, 5).fixToField()
+                assertEquals("""
+            |   |
+            |   |
+            |   |
+            |   |
+            |   |
+            | * |
+            |   |
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 1)
+                assertEquals(false, block.moveToDown())
+
+                block.fixToField()
+                assertEquals("""
+            |   |
+            | * |
+            | * |
+            | * |
+            | * |
+            | * |
+            |   |
+            |   |
+            |   |
+            """.trimIndent(), _field.toString())
+            }
         }
 
-        @Test
-        fun cannotMove_exceedGround() {
-            val block = StraightBlock(_field, 1, 5)
-            assertEquals(false, block.moveToDown())
+        class RotateRightTest {
+            private val _width = 4
+            private val _height = 4
+            private var _field: Field = Field(_width, _height)
 
-            block.fixToField()
-            assertEquals("""
-            |   |
-            |   |
-            |   |
-            |   |
-            |   |
-            | * |
-            | * |
-            | * |
-            | * |
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canRotate() {
+                SingleBlock(_field, 0, 0).fixToField()
+                SingleBlock(_field, 0, 2).fixToField()
+                SingleBlock(_field, 0, 3).fixToField()
+                SingleBlock(_field, 2, 0).fixToField()
+                SingleBlock(_field, 2, 2).fixToField()
+                SingleBlock(_field, 2, 3).fixToField()
+                SingleBlock(_field, 3, 0).fixToField()
+                SingleBlock(_field, 3, 2).fixToField()
+                SingleBlock(_field, 3, 3).fixToField()
+                assertEquals("""
+            |* **|
+            |    |
+            |* **|
+            |* **|
             """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(true, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            |* **|
+            |****|
+            |* **|
+            |* **|
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall_1() {
+                val block = StraightBlock(_field, 2, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            |  * |
+            |  * |
+            |  * |
+            |  * |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall_2() {
+                val block = StraightBlock(_field, 0, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            |*   |
+            |*   |
+            |*   |
+            |*   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_1() {
+                SingleBlock(_field, 0, 1).fixToField()
+                assertEquals("""
+            |    |
+            |*   |
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            |**  |
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_2() {
+                SingleBlock(_field, 2, 1).fixToField()
+                assertEquals("""
+            |    |
+            |  * |
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            | ** |
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_3() {
+                SingleBlock(_field, 3, 1).fixToField()
+                assertEquals("""
+            |    |
+            |   *|
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateRight())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            | * *|
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
         }
 
-        @Test
-        fun cannotMove_exceedBlock_1() {
-            SingleBlock(_field, 1, 5).fixToField()
-            assertEquals("""
-            |   |
-            |   |
-            |   |
-            |   |
-            |   |
-            | * |
-            |   |
-            |   |
-            |   |
+        class RotateLeftTest {
+            private val _width = 4
+            private val _height = 4
+            private var _field: Field = Field(_width, _height)
+
+            @Before
+            fun before() {
+                _field = Field(_width, _height)
+            }
+
+            @Test
+            fun canRotate() {
+                SingleBlock(_field, 0, 0).fixToField()
+                SingleBlock(_field, 0, 2).fixToField()
+                SingleBlock(_field, 0, 3).fixToField()
+                SingleBlock(_field, 2, 0).fixToField()
+                SingleBlock(_field, 2, 2).fixToField()
+                SingleBlock(_field, 2, 3).fixToField()
+                SingleBlock(_field, 3, 0).fixToField()
+                SingleBlock(_field, 3, 2).fixToField()
+                SingleBlock(_field, 3, 3).fixToField()
+                assertEquals("""
+            |* **|
+            |    |
+            |* **|
+            |* **|
             """.trimIndent(), _field.toString())
 
-            val block = StraightBlock(_field, 1, 1)
-            assertEquals(false, block.moveToDown())
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(true, block.rotateLeft())
 
-            block.fixToField()
-            assertEquals("""
-            |   |
-            | * |
-            | * |
-            | * |
-            | * |
-            | * |
-            |   |
-            |   |
-            |   |
+                block.fixToField()
+                assertEquals("""
+            |* **|
+            |****|
+            |* **|
+            |* **|
             """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall_1() {
+                val block = StraightBlock(_field, 2, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |  * |
+            |  * |
+            |  * |
+            |  * |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotMove_exceedWall_2() {
+                val block = StraightBlock(_field, 0, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            |*   |
+            |*   |
+            |*   |
+            |*   |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_1() {
+                SingleBlock(_field, 0, 1).fixToField()
+                assertEquals("""
+            |    |
+            |*   |
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            |**  |
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_2() {
+                SingleBlock(_field, 2, 1).fixToField()
+                assertEquals("""
+            |    |
+            |  * |
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            | ** |
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
+
+            @Test
+            fun cannotRotate_exceedBlock_3() {
+                SingleBlock(_field, 3, 1).fixToField()
+                assertEquals("""
+            |    |
+            |   *|
+            |    |
+            |    |
+            """.trimIndent(), _field.toString())
+
+                val block = StraightBlock(_field, 1, 0)
+                assertEquals(false, block.rotateLeft())
+
+                block.fixToField()
+                assertEquals("""
+            | *  |
+            | * *|
+            | *  |
+            | *  |
+            """.trimIndent(), _field.toString())
+            }
         }
     }
 }

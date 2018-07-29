@@ -7,9 +7,19 @@ abstract class AbstractBlock(
         protected var _x: Int,
         protected var _y: Int
 ) : IBlock {
-    abstract override fun positions(): Array<Position>
-    abstract override fun rotateRight(): Boolean
-    abstract override fun rotateLeft(): Boolean
+    protected var _current = 0
+
+    open fun shapes(): Array<Array<Position>> {
+        return arrayOf()
+    }
+
+    private fun shape(): Array<Position> {
+        return shapes()[_current]
+    }
+
+    override fun positions(): Array<Position> {
+        return shape().map { p -> Position(_x + p.x, _y + p.y) }.toTypedArray()
+    }
 
     override fun fixToField() {
         positions().forEach { p -> _field.setCell(p.x, p.y) }
@@ -39,6 +49,26 @@ abstract class AbstractBlock(
             return true
         } else {
             return false
+        }
+    }
+
+    override fun rotateRight(): Boolean {
+        val next = (_current + 1) % shapes().size
+        return if (shapes()[next].all { p -> _field.isEmpty(p.x, p.y) }) {
+            _current = next
+            true
+        } else {
+            false
+        }
+    }
+
+    override fun rotateLeft(): Boolean {
+        val next = (_current + shapes().size - 1) % shapes().size
+        return if (shapes()[next].all { p -> _field.isEmpty(p.x, p.y) }) {
+            _current = next
+            true
+        } else {
+            false
         }
     }
 }
