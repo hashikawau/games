@@ -1,8 +1,7 @@
 package com.example.games
 
-import com.example.games.model.blocks.MinimumBlock
+import com.example.games.model.blocks.SingleBlock
 import com.example.games.model.Field;
-import com.example.games.model.blocks.Position
 import com.example.games.model.blocks.RectangleBlock
 import org.junit.Test
 
@@ -55,7 +54,7 @@ class RectangleBlockTest {
         @Test
         fun cannotMove_exceedBlock_1() {
             val field = Field(4, 4)
-            MinimumBlock(field, 3, 1).fixToField()
+            SingleBlock(field, 3, 1).fixToField()
             assertEquals("""
             |    |
             |   *|
@@ -78,7 +77,7 @@ class RectangleBlockTest {
         @Test
         fun cannotMove_exceedBlock_2() {
             val field = Field(4, 4)
-            MinimumBlock(field, 3, 2).fixToField()
+            SingleBlock(field, 3, 2).fixToField()
             assertEquals("""
             |    |
             |    |
@@ -133,7 +132,7 @@ class RectangleBlockTest {
         @Test
         fun cannotMove_exceedBlock_1() {
             val field = Field(4, 4)
-            MinimumBlock(field, 0, 1).fixToField()
+            SingleBlock(field, 0, 1).fixToField()
             assertEquals("""
             |    |
             |*   |
@@ -156,7 +155,7 @@ class RectangleBlockTest {
         @Test
         fun cannotMove_exceedBlock_2() {
             val field = Field(4, 4)
-            MinimumBlock(field, 0, 2).fixToField()
+            SingleBlock(field, 0, 2).fixToField()
             assertEquals("""
             |    |
             |    |
@@ -211,7 +210,7 @@ class RectangleBlockTest {
         @Test
         fun cannotMove_exceedBlock_1() {
             val field = Field(4, 4)
-            MinimumBlock(field, 1, 3).fixToField()
+            SingleBlock(field, 1, 3).fixToField()
             assertEquals("""
             |    |
             |    |
@@ -234,7 +233,7 @@ class RectangleBlockTest {
         @Test
         fun cannotMove_exceedBlock_2() {
             val field = Field(4, 4)
-            MinimumBlock(field, 2, 3).fixToField()
+            SingleBlock(field, 2, 3).fixToField()
             assertEquals("""
             |    |
             |    |

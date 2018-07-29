@@ -1,6 +1,6 @@
 package com.example.games
 
-import com.example.games.model.blocks.MinimumBlock
+import com.example.games.model.blocks.SingleBlock
 import com.example.games.model.Field;
 import org.junit.Test
 
@@ -23,7 +23,7 @@ class TetrisModelTest {
     @Test
     fun field_fix_isCorrect() {
         val field = Field(4, 6)
-        val block = MinimumBlock(field)
+        val block = SingleBlock(field)
         block.moveTo(1, 5)
         block.fixToField()
         assertEquals("""
@@ -39,7 +39,7 @@ class TetrisModelTest {
     @Test
     fun block_moveToRightEnd_isCorrect() {
         val field = Field(4, 1)
-        val block = MinimumBlock(field)
+        val block = SingleBlock(field)
         assertEquals(true, block.moveToRight())
         assertEquals(1, block.x)
         assertEquals(0, block.y)
@@ -61,13 +61,13 @@ class TetrisModelTest {
     @Test
     fun block_moveToRightBlock_isCorrect() {
         val field = with(Field(4, 1)) {
-            val block = MinimumBlock(this)
+            val block = SingleBlock(this)
             while (block.moveToRight()) {
             }
             block.fixToField()
             this
         }
-        val block = MinimumBlock(field)
+        val block = SingleBlock(field)
         assertEquals(true, block.moveToRight())
         assertEquals(1, block.x)
         assertEquals(0, block.y)
@@ -86,7 +86,7 @@ class TetrisModelTest {
     @Test
     fun block_moveToLeftEnd_isCorrect() {
         val field = Field(4, 1)
-        val block = with(MinimumBlock(field)) {
+        val block = with(SingleBlock(field)) {
             while (this.moveToRight()) {
             }
             this
@@ -112,11 +112,11 @@ class TetrisModelTest {
     @Test
     fun block_moveToLeftBlock_isCorrect() {
         val field = with(Field(4, 1)) {
-            val block = MinimumBlock(this)
+            val block = SingleBlock(this)
             block.fixToField()
             this
         }
-        val block = with(MinimumBlock(field)) {
+        val block = with(SingleBlock(field)) {
             while (this.moveToRight()) {
             }
             this
@@ -139,7 +139,7 @@ class TetrisModelTest {
     @Test
     fun block_moveToDownEnd_isCorrect() {
         val field = Field(1, 6)
-        val block = MinimumBlock(field)
+        val block = SingleBlock(field)
         assertEquals(true, block.moveToDown())
         assertEquals(0, block.x)
         assertEquals(1, block.y)
@@ -172,12 +172,12 @@ class TetrisModelTest {
     @Test
     fun block_moveToDownBlock_isCorrect() {
         val field = with(Field(1, 6)) {
-            val block = MinimumBlock(this)
+            val block = SingleBlock(this)
             while (block.moveToDown()) {}
             block.fixToField()
             this
         }
-        val block = MinimumBlock(field)
+        val block = SingleBlock(field)
         assertEquals(true, block.moveToDown())
         assertEquals(0, block.x)
         assertEquals(1, block.y)
@@ -207,19 +207,19 @@ class TetrisModelTest {
     @Test
     fun field_erase_isCorrect() {
         val field = with(Field(4, 6)) {
-            with(MinimumBlock(this)) { moveTo(0, 5); fixToField() }
-            with(MinimumBlock(this)) { moveTo(1, 5); fixToField() }
-            with(MinimumBlock(this)) { moveTo(2, 5); fixToField() }
-            with(MinimumBlock(this)) { moveTo(3, 5); fixToField() }
-            with(MinimumBlock(this)) { moveTo(0, 4); fixToField() }
-            with(MinimumBlock(this)) { moveTo(1, 4); fixToField() }
-            with(MinimumBlock(this)) { moveTo(3, 4); fixToField() }
-            with(MinimumBlock(this)) { moveTo(0, 3); fixToField() }
-            with(MinimumBlock(this)) { moveTo(1, 3); fixToField() }
-            with(MinimumBlock(this)) { moveTo(2, 3); fixToField() }
-            with(MinimumBlock(this)) { moveTo(3, 3); fixToField() }
-            with(MinimumBlock(this)) { moveTo(0, 0); fixToField() }
-            with(MinimumBlock(this)) { moveTo(2, 0); fixToField() }
+            with(SingleBlock(this)) { moveTo(0, 5); fixToField() }
+            with(SingleBlock(this)) { moveTo(1, 5); fixToField() }
+            with(SingleBlock(this)) { moveTo(2, 5); fixToField() }
+            with(SingleBlock(this)) { moveTo(3, 5); fixToField() }
+            with(SingleBlock(this)) { moveTo(0, 4); fixToField() }
+            with(SingleBlock(this)) { moveTo(1, 4); fixToField() }
+            with(SingleBlock(this)) { moveTo(3, 4); fixToField() }
+            with(SingleBlock(this)) { moveTo(0, 3); fixToField() }
+            with(SingleBlock(this)) { moveTo(1, 3); fixToField() }
+            with(SingleBlock(this)) { moveTo(2, 3); fixToField() }
+            with(SingleBlock(this)) { moveTo(3, 3); fixToField() }
+            with(SingleBlock(this)) { moveTo(0, 0); fixToField() }
+            with(SingleBlock(this)) { moveTo(2, 0); fixToField() }
             this
         }
         assertEquals("""
