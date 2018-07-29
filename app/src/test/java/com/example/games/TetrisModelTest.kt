@@ -1,6 +1,6 @@
 package com.example.games
 
-import com.example.games.model.MinimumBlock
+import com.example.games.model.blocks.MinimumBlock
 import com.example.games.model.Field;
 import org.junit.Test
 

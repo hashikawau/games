@@ -1,11 +1,9 @@
 package com.example.games.model
 
-import android.support.constraint.solver.widgets.Rectangle
-import android.util.Log
 import com.example.games.model.blocks.*
 import java.util.*
 
-class Field(private val _width: Int, private val _height: Int) {
+class Field(private val _width: Int, private val _height: Int, private val _blocks: Array<() -> IBlock> = arrayOf(), private val _random: Random = Random(0)) {
 
     private val _array2d: Array<Array<Boolean>> = Array(_height) { Array(_width) { false } }
 
@@ -28,24 +26,22 @@ class Field(private val _width: Int, private val _height: Int) {
     }
 
     fun isEmpty(x: Int, y: Int): Boolean {
-        if (isInRange(x, y))
-            return !_array2d[y][x]
+        return if (isInRange(x, y))
+            !_array2d[y][x]
         else
-            return false
+            false
     }
 
-    private val _rand = Random(Date().time)
+    private val _possibles = arrayOf(
+            { RectangleBlock(this, _width / 2 - 1, 0) },
+            { StraightBlock(this, _width / 2 - 1, 0) },
+            { GapLeftBlock(this, _width / 2 - 1, 0) },
+            { GapRightBlock(this, _width / 2 - 1, 0) },
+            { HookLeftBlock(this, _width / 2 - 1, 0) },
+            { HookRightBlock(this, _width / 2 - 1, 0) })
+
     fun newBlock(): IBlock {
-        val type = _rand.nextInt(6)
-        return when (type) {
-            0 -> RectangleBlock(this, _width / 2 - 1, 0)
-            1 -> StraightBlock(this, _width / 2 - 1, 0)
-            2 -> GapLeftBlock(this, _width / 2 - 1, 0)
-            3 -> GapRightBlock(this, _width / 2 - 1, 0)
-            4 -> HookLeftBlock(this, _width / 2 - 1, 0)
-            5 -> HookRightBlock(this, _width / 2 - 1, 0)
-            else -> MinimumBlock(this, _width / 2 - 1, 0)
-        }
+        return _possibles[_random.nextInt(_possibles.size)]()
     }
 
     fun erase() {
@@ -60,16 +56,16 @@ class Field(private val _width: Int, private val _height: Int) {
     }
 
     override fun toString(): String {
-        return _array2d
-                .map { row -> "%s".format(outputString(row)) }
-                .joinToString("\n")
+        return _array2d.joinToString("\n") { row ->
+            "%s".format(outputString(row))
+        }
     }
 
     companion object {
         private fun outputString(row: Array<Boolean>): String {
-            return row
-                    .map { b -> if (b) "*" else " " }
-                    .joinToString("", "|", "|")
+            return row.joinToString("", "|", "|") { b ->
+                if (b) "*" else " "
+            }
         }
     }
 }
