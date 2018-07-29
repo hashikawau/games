@@ -4,7 +4,7 @@ import com.example.games.model.Field
 
 interface IBlock {
     fun positions(): Array<Position>
-    fun fixToField(): Unit
+    fun fixToField()
     fun moveToRight(): Boolean
     fun moveToLeft(): Boolean
     fun moveToDown(): Boolean
@@ -12,7 +12,7 @@ interface IBlock {
     fun rotateLeft(): Boolean
 }
 
-class Position(val x: Int, val y: Int) {}
+class Position(val x: Int, val y: Int)
 
 class MinimumBlock(
         private val _field: Field,
