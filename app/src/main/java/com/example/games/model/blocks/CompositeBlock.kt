@@ -1,20 +1,18 @@
 package com.example.games.model.blocks
 
+import android.util.Log
 import com.example.games.model.Field
 
-abstract class AbstractBlock(
+class CompositeBlock(
+        protected val _shapes: Array<Array<Position>>,
         protected val _field: Field,
         protected var _x: Int,
         protected var _y: Int
 ) : IBlock {
     protected var _current = 0
 
-    open fun shapes(): Array<Array<Position>> {
-        return arrayOf()
-    }
-
     private fun shape(): Array<Position> {
-        return shapes()[_current]
+        return _shapes[_current]
     }
 
     override fun positions(): Array<Position> {
@@ -53,8 +51,8 @@ abstract class AbstractBlock(
     }
 
     override fun rotateRight(): Boolean {
-        val next = (_current + 1) % shapes().size
-        return if (shapes()[next].all { p -> _field.isEmpty(p.x, p.y) }) {
+        val next = (_current + 1) % _shapes.size
+        return if (_shapes[next].map { p -> Position(_x + p.x, _y + p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
             _current = next
             true
         } else {
@@ -63,8 +61,8 @@ abstract class AbstractBlock(
     }
 
     override fun rotateLeft(): Boolean {
-        val next = (_current + shapes().size - 1) % shapes().size
-        return if (shapes()[next].all { p -> _field.isEmpty(p.x, p.y) }) {
+        val next = (_current + _shapes.size - 1) % _shapes.size
+        return if (_shapes[next].map { p -> Position(_x + p.x, _y + p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
             _current = next
             true
         } else {

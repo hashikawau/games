@@ -15,7 +15,7 @@ class TetrisActivity : AppCompatActivity() {
     private val _numX = 10
     private val _numY = 16
     private val _timeSpan = 1000L
-    private val _tetrisField = Field(_numX, _numY)
+    private val _tetrisField = Field(_numX, _numY, Random(Date().time))
     private var _currentBlock: IBlock? = null
     private var _buttons = Array(0) { Array(0) { Button(null) } }
 

@@ -17,4 +17,8 @@ class Position(val x: Int, val y: Int) {
     fun rotateLeft(): Position {
         return Position(-y, x)
     }
+
+    override fun toString(): String {
+        return "P(%d,%d)".format(x, y)
+    }
 }

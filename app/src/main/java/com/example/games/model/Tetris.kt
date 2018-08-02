@@ -3,7 +3,11 @@ package com.example.games.model
 import com.example.games.model.blocks.*
 import java.util.*
 
-class Field(private val _width: Int, private val _height: Int, private val _blocks: Array<() -> IBlock> = arrayOf(), private val _random: Random = Random(0)) {
+class Field(
+        private val _width: Int,
+        private val _height: Int,
+        private val _random: Random = Random(0)
+) {
 
     private val _array2d: Array<Array<Boolean>> = Array(_height) { Array(_width) { false } }
 
@@ -32,16 +36,18 @@ class Field(private val _width: Int, private val _height: Int, private val _bloc
             false
     }
 
-    private val _possibles = arrayOf(
-            { RectangleBlock(this, _width / 2 - 1, 0) },
-            { StraightBlock(this, _width / 2 - 1, 0) },
-            { GapLeftBlock(this, _width / 2 - 1, 0) },
-            { GapRightBlock(this, _width / 2 - 1, 0) },
-            { HookLeftBlock(this, _width / 2 - 1, 0) },
-            { HookRightBlock(this, _width / 2 - 1, 0) })
+    private val _blocks = arrayOf(
+            { makeRectangleBlock(this, _width / 2 - 1, 0) },
+            { makeStraightBlock(this, _width / 2 - 1, 0) },
+            { makeGapLeftBlock(this, _width / 2 - 1, 0) },
+            { makeGapRightBlock(this, _width / 2 - 1, 0) },
+            { makeHookLeftBlock(this, _width / 2 - 1, 0) },
+            { makeHookRightBlock(this, _width / 2 - 1, 0) },
+            { makeHookCenterBlock(this, _width / 2 - 1, 0) }
+    )
 
     fun newBlock(): IBlock {
-        return _possibles[_random.nextInt(_possibles.size)]()
+        return this._blocks[_random.nextInt(this._blocks.size)]()
     }
 
     fun erase() {
