@@ -11,6 +11,7 @@ fun makeSingleBlock(
             arrayOf(arrayOf(
                     Position(0, 0))),
             field,
+            Field.Space.RECTANGLE,
             x,
             y)
 }
@@ -27,6 +28,7 @@ fun makeRectangleBlock(
                     Position(1, 0),
                     Position(1, 1))),
             field,
+            Field.Space.RECTANGLE,
             x,
             y)
 }
@@ -47,6 +49,7 @@ fun makeStraightBlock(
                             Position(1, 1),
                             Position(2, 1))),
             field,
+            Field.Space.STRAIGHT,
             x,
             y)
 }
@@ -67,6 +70,7 @@ fun makeGapLeftBlock(
                             Position(1, 0),
                             Position(1, 1))),
             field,
+            Field.Space.GAP_LEFT,
             x,
             y)
 }
@@ -87,6 +91,7 @@ fun makeGapRightBlock(
                             Position(1, 1),
                             Position(1, 2))),
             field,
+            Field.Space.GAP_RIGHT,
             x,
             y)
 }
@@ -115,6 +120,7 @@ fun makeHookLeftBlock(
                             Position(1, 1),
                             Position(1, 2))),
             field,
+            Field.Space.HOOK_LEFT,
             x,
             y)
 }
@@ -143,6 +149,7 @@ fun makeHookRightBlock(
                             Position(1, 1),
                             Position(1, 2))),
             field,
+            Field.Space.HOOK_RIGHT,
             x,
             y)
 }
@@ -171,6 +178,7 @@ fun makeHookCenterBlock(
                             Position(0, 1),
                             Position(0, 2))),
             field,
+            Field.Space.HOOK_CENTER,
             x,
             y)
 }

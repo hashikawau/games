@@ -1,11 +1,11 @@
 package com.example.games.model.blocks
 
-import android.util.Log
 import com.example.games.model.Field
 
 class CompositeBlock(
         protected val _shapes: Array<Array<Position>>,
         protected val _field: Field,
+        public val space: Field.Space,
         protected var _x: Int,
         protected var _y: Int
 ) : IBlock {
@@ -20,7 +20,7 @@ class CompositeBlock(
     }
 
     override fun fixToField() {
-        positions().forEach { p -> _field.setCell(p.x, p.y) }
+        positions().forEach { p -> _field.setCell(p.x, p.y, space) }
     }
 
     override fun moveToRight(): Boolean {
