@@ -3,13 +3,13 @@ package com.example.games
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
 import android.widget.TableLayout
 import android.widget.TableRow
 import com.example.games.model.Field
 import com.example.games.model.blocks.CompositeBlock
-import com.example.games.model.blocks.IBlock
 import java.util.*
 
 class TetrisActivity : AppCompatActivity() {
@@ -55,21 +55,72 @@ class TetrisActivity : AppCompatActivity() {
             }
         }, _timeSpan, _timeSpan)
 
-        //
-        findViewById<Button>(R.id.button_rotate_left).setOnClickListener { view ->
-            _currentBlock?.rotateLeft()
+        _gestureDetector = GestureDetector(this, _onGestureListener)
+    }
+
+    private var _gestureDetector: GestureDetector? = null
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (_gestureDetector!!.onTouchEvent(event)) {
+            return true;
         }
-        findViewById<Button>(R.id.button_rotate_right).setOnClickListener { view ->
+        return super.onTouchEvent(event);
+    }
+
+    private val FLICK_THRESHOLD_DISTANCE = _blockSize / 2
+
+    // タッチイベントのリスナー
+    private val _onGestureListener = object : GestureDetector.SimpleOnGestureListener() {
+        // フリックイベント
+        override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+            if (_currentBlock == null)
+                return false
+
+            if (Math.abs(event1.x - event2.x) < FLICK_THRESHOLD_DISTANCE && Math.abs(event1.y - event2.y) < FLICK_THRESHOLD_DISTANCE)
+                return false
+
+            if (didFlickToLeft(event1, event2, velocityX, velocityY)) {
+                _currentBlock!!.moveToLeft();
+                return true;
+            }
+
+            if (didFlickToRight(event1, event2, velocityX, velocityY)) {
+                _currentBlock!!.moveToRight();
+                return true;
+            }
+
+            if (didFlickToDown(event1, event2, velocityX, velocityY)) {
+                downToGround()
+                return true
+            }
+
+            return false
+        }
+
+        private fun didFlickToLeft(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+            return isFlickHorizontal(velocityX, velocityY) && velocityX < 0
+        }
+
+        private fun didFlickToRight(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+            return isFlickHorizontal(velocityX, velocityY) && velocityX > 0
+        }
+
+        private fun didFlickToDown(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+            return isFlickVertical(velocityX, velocityY) && velocityY > 0
+        }
+
+        private fun isFlickHorizontal(velocityX: Float, velocityY: Float): Boolean {
+            return Math.abs(velocityX) > Math.abs(velocityY)
+        }
+
+        private fun isFlickVertical(velocityX: Float, velocityY: Float): Boolean {
+            return isFlickHorizontal(velocityX, velocityY).not()
+        }
+
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
             _currentBlock?.rotateRight()
-        }
-        findViewById<Button>(R.id.button_move_left).setOnClickListener { view ->
-            _currentBlock?.moveToLeft()
-        }
-        findViewById<Button>(R.id.button_move_right).setOnClickListener { view ->
-            _currentBlock?.moveToRight()
-        }
-        findViewById<Button>(R.id.button_move_down).setOnClickListener { view ->
-            down()
+//            _currentBlock?.rotateLeft()
+            return true
         }
     }
 
@@ -93,7 +144,7 @@ class TetrisActivity : AppCompatActivity() {
             }
 
             for (p in _currentBlock?.positions() ?: arrayOf()) {
-                when(_currentBlock?.space) {
+                when (_currentBlock?.space) {
                     Field.Space.RECTANGLE -> _spaces!![p.y][p.x].setBackgroundColor(Color.DKGRAY)
                     Field.Space.STRAIGHT -> _spaces!![p.y][p.x].setBackgroundColor(Color.RED)
                     Field.Space.GAP_LEFT -> _spaces!![p.y][p.x].setBackgroundColor(Color.MAGENTA)
@@ -112,6 +163,15 @@ class TetrisActivity : AppCompatActivity() {
             _tetrisField.erase()
             _currentBlock = null
         }
+    }
+
+    private fun downToGround() {
+        while (_currentBlock?.moveToDown() ?: false) {
+        }
+
+        _currentBlock?.fixToField()
+        _tetrisField.erase()
+        _currentBlock = null
     }
 
 }
