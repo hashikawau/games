@@ -1,8 +1,9 @@
 package com.example.games
 
 import android.graphics.Color
-import android.support.v7.app.AppCompatActivity
+import android.graphics.Point
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -12,6 +13,7 @@ import com.example.games.model.Field
 import com.example.games.model.blocks.CompositeBlock
 import java.util.*
 
+
 class TetrisActivity : AppCompatActivity() {
 
     private val _numX = 10
@@ -20,36 +22,46 @@ class TetrisActivity : AppCompatActivity() {
     private val _tetrisField = Field(_numX, _numY, Random(Date().time))
     private var _currentBlock: CompositeBlock? = null
     private var _spaces = Array(0) { Array(0) { View(null) } }
+    private var _blockSize = 0
+    private val HEIGHT_OF_TITLE_BAR = 120
+
+    //
+    private val _drawingTimer = Timer(true)
+    private val _downingTimer = Timer(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        supportActionBar?.hide();
+
         setContentView(R.layout.activity_tetris)
 
         _spaces = Array(_numY) { Array(_numX) { View(this) } }
 
+        val displaySize = Point()
+        windowManager.defaultDisplay.getSize(displaySize)
+        _blockSize = Math.min(displaySize.x / _numX, (displaySize.y - HEIGHT_OF_TITLE_BAR) / _numY)
+
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
-        val sizeButton = 60
         for (y in 0 until _numY) {
             val tableRow = TableRow(this)
             tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
             for (x in 0 until _numX) {
-                _spaces!![y][x].layoutParams = TableRow.LayoutParams(sizeButton, sizeButton)
+                _spaces!![y][x].layoutParams = TableRow.LayoutParams(_blockSize, _blockSize)
                 tableRow.addView(_spaces!![y][x])
             }
             tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
         }
 
         // タイマーの初期化処理
-        val drawingTimer = Timer(true)
-        drawingTimer.schedule(object : TimerTask() {
+        _drawingTimer.schedule(object : TimerTask() {
             override fun run() {
                 update()
             }
         }, 0, 100)
 
         //
-        val downingTimer = Timer(true)
-        downingTimer.schedule(object : TimerTask() {
+        _downingTimer.schedule(object : TimerTask() {
             override fun run() {
                 down()
             }
@@ -162,16 +174,30 @@ class TetrisActivity : AppCompatActivity() {
             _currentBlock?.fixToField()
             _tetrisField.erase()
             _currentBlock = null
+
+            if (_tetrisField.array2d[0].any { space -> space != Field.Space.EMPTY }) {
+                showGameOver()
+            }
         }
     }
 
     private fun downToGround() {
         while (_currentBlock?.moveToDown() ?: false) {
         }
+        down()
+    }
 
-        _currentBlock?.fixToField()
-        _tetrisField.erase()
-        _currentBlock = null
+    private fun showGameOver() {
+        _drawingTimer.cancel()
+        _downingTimer.cancel()
+
+        runOnUiThread {
+            for (y in 0 until _numY) {
+                for (x in 0 until _numX) {
+                    _spaces!![y][x].setBackgroundColor(Color.GRAY)
+                }
+            }
+        }
     }
 
 }
