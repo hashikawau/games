@@ -1,0 +1,10 @@
+
+[todo tetris]
+    animation when game over
+    screen of game over
+    animation when erase lines
+    show number of erased lines
+    show score
+    play sounds
+    show next block
+
