@@ -1,4 +1,4 @@
-package com.example.games
+package com.example.games.tetris.screen
 
 import android.graphics.Color
 import android.graphics.Point
@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.TableLayout
 import android.widget.TableRow
+import com.example.games.R
 import com.example.games.model.Field
 import com.example.games.model.blocks.CompositeBlock
 import java.util.*

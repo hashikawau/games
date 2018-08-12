@@ -23,6 +23,14 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.release_config
     }
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/tetris',
+                    'src/main/res',
+            ]
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false

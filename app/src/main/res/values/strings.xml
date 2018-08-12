@@ -1,9 +1,3 @@
 <resources>
     <string name="app_name">games</string>
-    <string name="tetris">tetris</string>
-    <string name="button_rotate_left">(</string>
-    <string name="button_move_left"><![CDATA[<]]></string>
-    <string name="button_move_down">v</string>
-    <string name="button_move_right"><![CDATA[>]]></string>
-    <string name="button_rotate_right">)</string>
 </resources>
