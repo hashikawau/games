@@ -4,9 +4,11 @@ import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.TableLayout
 import android.widget.TableRow
 import com.example.games.R
@@ -18,7 +20,7 @@ import java.util.*
 class TetrisActivity : AppCompatActivity() {
 
     private val _numX = 10
-    private val _numY = 16
+    private val _numY = 18
     private val _timeSpan = 1000L
     private val _tetrisField = Field(_numX, _numY, Random(Date().time))
     private var _currentBlock: CompositeBlock? = null
@@ -41,7 +43,7 @@ class TetrisActivity : AppCompatActivity() {
 
         val displaySize = Point()
         windowManager.defaultDisplay.getSize(displaySize)
-        _blockSize = Math.min(displaySize.x / _numX, (displaySize.y - HEIGHT_OF_TITLE_BAR) / _numY)
+        _blockSize = 1;//Math.min(displaySize.x / _numX, (displaySize.y - HEIGHT_OF_TITLE_BAR) / _numY)
 
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
         for (y in 0 until _numY) {
@@ -54,24 +56,40 @@ class TetrisActivity : AppCompatActivity() {
             tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
         }
 
-        // タイマーの初期化処理
-        _drawingTimer.schedule(object : TimerTask() {
-            override fun run() {
-                update()
+        val layout = findViewById<View>(R.id.layout_contents_game);
+        layout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                val width = layout.measuredWidth;
+                val height = layout.measuredHeight;
+                _blockSize = Math.min(width / _numX, height / _numY)
+                for (y in 0 until _numY)
+                    for (x in 0 until _numX)
+                        _spaces[y][x].layoutParams = TableRow.LayoutParams(_blockSize, _blockSize);
             }
-        }, 0, 100)
+        })
+
+        // タイマーの初期化処理
+        _drawingTimer.schedule(
+                object : TimerTask() {
+                    override fun run() {
+                        update()
+                    }
+                }, 0, 100)
 
         //
-        _downingTimer.schedule(object : TimerTask() {
-            override fun run() {
-                down()
-            }
-        }, _timeSpan, _timeSpan)
+        _downingTimer.schedule(
+                object : TimerTask() {
+                    override fun run() {
+                        down()
+                    }
+                }, _timeSpan, _timeSpan)
 
         _gestureDetector = GestureDetector(this, _onGestureListener)
     }
 
-    private var _gestureDetector: GestureDetector? = null
+    private
+    var _gestureDetector: GestureDetector? = null
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (_gestureDetector!!.onTouchEvent(event)) {
@@ -80,10 +98,12 @@ class TetrisActivity : AppCompatActivity() {
         return super.onTouchEvent(event);
     }
 
-    private val FLICK_THRESHOLD_DISTANCE = _blockSize / 2
+    private
+    val FLICK_THRESHOLD_DISTANCE = _blockSize / 2
 
     // タッチイベントのリスナー
-    private val _onGestureListener = object : GestureDetector.SimpleOnGestureListener() {
+    private
+    val _onGestureListener = object : GestureDetector.SimpleOnGestureListener() {
         // フリックイベント
         override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if (_currentBlock == null)
