@@ -5,4 +5,6 @@
     <string name="button_move_down">v</string>
     <string name="button_move_right"><![CDATA[>]]></string>
     <string name="button_rotate_right">)</string>
+    <string name="textView_label_score">SCORE</string>
+    <string name="textView_label_erased_lines">LINES</string>
 </resources>

@@ -29,8 +29,8 @@ class TetrisActivity : AppCompatActivity() {
     private val HEIGHT_OF_TITLE_BAR = 120
 
     //
-    private val _drawingTimer = Timer(true)
-    private val _downingTimer = Timer(true)
+    private var _drawingTimer: Timer? = null
+    private var _downingTimer: Timer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +41,18 @@ class TetrisActivity : AppCompatActivity() {
 
         initLayoutTetrisField()
         initLayoutNextBlock()
-        initTimer()
 
         _gestureDetector = GestureDetector(this, _onGestureListener)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        resumeTimer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        pauseTimer()
     }
 
     private fun initLayoutTetrisField() {
@@ -96,11 +105,25 @@ class TetrisActivity : AppCompatActivity() {
             }
             tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
         }
+
+        val layout = findViewById<View>(R.id.tableLayout_next_block);
+        layout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                val width = layout.measuredWidth;
+                val height = layout.measuredHeight;
+                val blockSize = Math.min(width / _nextBlockNumX, height / _nextBlockNumY)
+                for (y in 0 until _nextBlockNumY)
+                    for (x in 0 until _nextBlockNumX)
+                        _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams(blockSize, blockSize);
+            }
+        })
     }
 
-    private fun initTimer() {
+    private fun resumeTimer() {
         // タイマーの初期化処理
-        _drawingTimer.schedule(
+        _drawingTimer = Timer()
+        _drawingTimer!!.schedule(
                 object : TimerTask() {
                     override fun run() {
                         update()
@@ -108,12 +131,18 @@ class TetrisActivity : AppCompatActivity() {
                 }, 0, 100)
 
         //
-        _downingTimer.schedule(
+        _downingTimer = Timer()
+        _downingTimer!!.schedule(
                 object : TimerTask() {
                     override fun run() {
                         down()
                     }
                 }, _timeSpan, _timeSpan)
+    }
+
+    private fun pauseTimer() {
+        _drawingTimer!!.cancel()
+        _downingTimer!!.cancel()
     }
 
     private var _gestureDetector: GestureDetector? = null
@@ -236,15 +265,13 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun showGameOver() {
-        _drawingTimer.cancel()
-        _downingTimer.cancel()
+        _drawingTimer!!.cancel()
+        _downingTimer!!.cancel()
 
         runOnUiThread {
-            for (y in 0 until _numY) {
-                for (x in 0 until _numX) {
+            for (y in 0 until _numY)
+                for (x in 0 until _numX)
                     _spaces!![y][x].setBackgroundColor(Color.GRAY)
-                }
-            }
         }
     }
 

@@ -7,5 +7,4 @@
     show number of erased lines
     show score
     play sounds
-    show next block
 
