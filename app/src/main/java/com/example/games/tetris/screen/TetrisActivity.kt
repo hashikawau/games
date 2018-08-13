@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.TableLayout
 import android.widget.TableRow
+import android.widget.TextView
 import com.example.games.R
 import com.example.games.model.Field
 import com.example.games.model.blocks.CompositeBlock
@@ -26,7 +27,9 @@ class TetrisActivity : AppCompatActivity() {
     private var _nextBlock: CompositeBlock? = null
     private var _spaces = Array(0) { Array(0) { View(null) } }
     private var _blockSize = 0
-    private val HEIGHT_OF_TITLE_BAR = 120
+
+    private var _score = 0
+    private var _erasedLines = 0
 
     //
     private var _drawingTimer: Timer? = null
@@ -48,6 +51,9 @@ class TetrisActivity : AppCompatActivity() {
         _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
         _nextBlock = _tetrisField.newBlock()
 
+
+        findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
+        findViewById<TextView>(R.id.textView_value_erased_lines).setText(_erasedLines.toString())
     }
 
     override fun onResume() {
@@ -237,8 +243,17 @@ class TetrisActivity : AppCompatActivity() {
         val erased = _tetrisField.erasedLines()
         if (erased.size > 0) {
             Thread.sleep(SLEEP_TIME_FOR_ERASE)
+
+            _score += calculateScore(erased.size)
+            _erasedLines += erased.size
+            runOnUiThread {
+                findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
+                findViewById<TextView>(R.id.textView_value_erased_lines).setText(_erasedLines.toString())
+            }
+
             _tetrisField.erase()
         }
+
         if (_currentBlock == null) {
             _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
             _nextBlock = _tetrisField.newBlock()
@@ -247,6 +262,11 @@ class TetrisActivity : AppCompatActivity() {
                 showGameOver()
             }
         }
+    }
+
+    private val SCORE_TABLE = intArrayOf(1, 10, 100, 1000, 10000)
+    private fun calculateScore(erasedLines: Int): Int {
+        return SCORE_TABLE[erasedLines]
     }
 
     private fun colorOf(blockType: Field.Space?): Int {
