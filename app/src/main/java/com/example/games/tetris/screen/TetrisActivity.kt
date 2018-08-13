@@ -43,6 +43,11 @@ class TetrisActivity : AppCompatActivity() {
         initLayoutNextBlock()
 
         _gestureDetector = GestureDetector(this, _onGestureListener)
+
+
+        _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
+        _nextBlock = _tetrisField.newBlock()
+
     }
 
     override fun onResume() {
@@ -89,7 +94,7 @@ class TetrisActivity : AppCompatActivity() {
 
     private val _nextBlockNumX = 4
     private val _nextBlockNumY = 4
-    private val _nextBlockSize = 30
+    private val _nextBlockSize = 1
     private var _nextBlockSpace = Array(0) { Array(0) { View(null) } }
 
     private fun initLayoutNextBlock() {
@@ -211,29 +216,40 @@ class TetrisActivity : AppCompatActivity() {
         }
     }
 
-    private fun update() {
-        if (_currentBlock == null) {
-            _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
-            _nextBlock = _tetrisField.newBlock()
-        }
+    private val SLEEP_TIME_FOR_ERASE = 500L
 
+    private fun update() {
         runOnUiThread {
             for (y in 0 until _numY)
                 for (x in 0 until _numX)
                     _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.array2d[y][x]))
 
             for (p in _currentBlock?.positions() ?: arrayOf())
-                _spaces[p.y][p.x].setBackgroundColor(colorOf(_currentBlock!!.space))
+                _spaces[p.y][p.x].setBackgroundColor(colorOf(_currentBlock?.space))
 
             for (y in 0 until _nextBlockNumY)
                 for (x in 0 until _nextBlockNumX)
                     _nextBlockSpace[y][x].setBackgroundColor(Color.WHITE)
             for (p in _nextBlock?.shape() ?: arrayOf())
-                _nextBlockSpace[p.y][p.x].setBackgroundColor(colorOf(_nextBlock!!.space))
+                _nextBlockSpace[p.y][p.x].setBackgroundColor(colorOf(_nextBlock?.space))
+        }
+
+        val erased = _tetrisField.erasedLines()
+        if (erased.size > 0) {
+            Thread.sleep(SLEEP_TIME_FOR_ERASE)
+            _tetrisField.erase()
+        }
+        if (_currentBlock == null) {
+            _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
+            _nextBlock = _tetrisField.newBlock()
+
+            if (_tetrisField.array2d[0].any { space -> space != Field.Space.EMPTY }) {
+                showGameOver()
+            }
         }
     }
 
-    private fun colorOf(blockType: Field.Space): Int {
+    private fun colorOf(blockType: Field.Space?): Int {
         return when (blockType) {
             Field.Space.RECTANGLE -> Color.DKGRAY
             Field.Space.STRAIGHT -> Color.RED
@@ -249,12 +265,8 @@ class TetrisActivity : AppCompatActivity() {
     private fun down() {
         if (_currentBlock?.moveToDown()?.not() ?: false) {
             _currentBlock?.fixToField()
-            _tetrisField.erase()
-            _currentBlock = null
 
-            if (_tetrisField.array2d[0].any { space -> space != Field.Space.EMPTY }) {
-                showGameOver()
-            }
+            _currentBlock = null
         }
     }
 
@@ -265,14 +277,14 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun showGameOver() {
-        _drawingTimer!!.cancel()
-        _downingTimer!!.cancel()
-
         runOnUiThread {
             for (y in 0 until _numY)
                 for (x in 0 until _numX)
                     _spaces!![y][x].setBackgroundColor(Color.GRAY)
         }
+
+        _drawingTimer!!.cancel()
+        _downingTimer!!.cancel()
     }
 
 }

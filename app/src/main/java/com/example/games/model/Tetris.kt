@@ -1,6 +1,5 @@
 package com.example.games.model
 
-import android.util.Log
 import com.example.games.model.blocks.*
 import java.util.*
 
@@ -59,6 +58,13 @@ class Field(
 
     fun newBlock(): CompositeBlock {
         return this._blocks[_random.nextInt(this._blocks.size)]()
+    }
+
+    fun erasedLines(): List<Int> {
+        return _array2d
+                .mapIndexed({ index, row -> Pair(index, row.all { space -> space != Space.EMPTY }) })
+                .filter { tup -> tup.second }
+                .map { tup -> tup.first }
     }
 
     fun erase() {
