@@ -125,7 +125,7 @@ class TetrisActivity : AppCompatActivity() {
         return super.onTouchEvent(event);
     }
 
-    private val FLICK_THRESHOLD_DISTANCE = _blockSize / 2
+    private val FLICK_THRESHOLD_DISTANCE = _blockSize
 
     // タッチイベントのリスナー
     private val _onGestureListener = object : GestureDetector.SimpleOnGestureListener() {
