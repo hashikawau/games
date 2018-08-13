@@ -48,13 +48,13 @@ class Field(
     }
 
     private val _blocks = arrayOf(
-            { makeRectangleBlock(this, _width / 2 - 1, 0) },
-            { makeStraightBlock(this, _width / 2 - 1, 0) },
-            { makeGapLeftBlock(this, _width / 2 - 1, 0) },
-            { makeGapRightBlock(this, _width / 2 - 1, 0) },
-            { makeHookLeftBlock(this, _width / 2 - 1, 0) },
-            { makeHookRightBlock(this, _width / 2 - 1, 0) },
-            { makeHookCenterBlock(this, _width / 2 - 1, 0) }
+            { makeRectangleBlock(this, _width / 2 - 2, -1) },
+            { makeStraightBlock(this, _width / 2 - 2, 0) },
+            { makeGapLeftBlock(this, _width / 2 - 2, 0) },
+            { makeGapRightBlock(this, _width / 2 - 2, 0) },
+            { makeHookLeftBlock(this, _width / 2 - 2, 0) },
+            { makeHookRightBlock(this, _width / 2 - 2, 0) },
+            { makeHookCenterBlock(this, _width / 2 - 2, 0) }
     )
 
     fun newBlock(): CompositeBlock {

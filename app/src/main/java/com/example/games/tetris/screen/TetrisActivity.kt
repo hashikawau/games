@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -24,6 +23,7 @@ class TetrisActivity : AppCompatActivity() {
     private val _timeSpan = 1000L
     private val _tetrisField = Field(_numX, _numY, Random(Date().time))
     private var _currentBlock: CompositeBlock? = null
+    private var _nextBlock: CompositeBlock? = null
     private var _spaces = Array(0) { Array(0) { View(null) } }
     private var _blockSize = 0
     private val HEIGHT_OF_TITLE_BAR = 120
@@ -39,6 +39,14 @@ class TetrisActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_tetris)
 
+        initLayoutTetrisField()
+        initLayoutNextBlock()
+        initTimer()
+
+        _gestureDetector = GestureDetector(this, _onGestureListener)
+    }
+
+    private fun initLayoutTetrisField() {
         _spaces = Array(_numY) { Array(_numX) { View(this) } }
 
         val displaySize = Point()
@@ -68,7 +76,29 @@ class TetrisActivity : AppCompatActivity() {
                         _spaces[y][x].layoutParams = TableRow.LayoutParams(_blockSize, _blockSize);
             }
         })
+    }
 
+    private val _nextBlockNumX = 4
+    private val _nextBlockNumY = 4
+    private val _nextBlockSize = 30
+    private var _nextBlockSpace = Array(0) { Array(0) { View(null) } }
+
+    private fun initLayoutNextBlock() {
+        _nextBlockSpace = Array(_nextBlockNumY) { Array(_nextBlockNumX) { View(this) } }
+
+        val tableLayout = findViewById<TableLayout>(R.id.tableLayout_next_block)
+        for (y in 0 until _nextBlockNumY) {
+            val tableRow = TableRow(this)
+            tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
+            for (x in 0 until _nextBlockNumX) {
+                _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams(_nextBlockSize, _nextBlockSize)
+                tableRow.addView(_nextBlockSpace[y][x])
+            }
+            tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
+        }
+    }
+
+    private fun initTimer() {
         // タイマーの初期化処理
         _drawingTimer.schedule(
                 object : TimerTask() {
@@ -84,12 +114,9 @@ class TetrisActivity : AppCompatActivity() {
                         down()
                     }
                 }, _timeSpan, _timeSpan)
-
-        _gestureDetector = GestureDetector(this, _onGestureListener)
     }
 
-    private
-    var _gestureDetector: GestureDetector? = null
+    private var _gestureDetector: GestureDetector? = null
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (_gestureDetector!!.onTouchEvent(event)) {
@@ -98,12 +125,10 @@ class TetrisActivity : AppCompatActivity() {
         return super.onTouchEvent(event);
     }
 
-    private
-    val FLICK_THRESHOLD_DISTANCE = _blockSize / 2
+    private val FLICK_THRESHOLD_DISTANCE = _blockSize / 2
 
     // タッチイベントのリスナー
-    private
-    val _onGestureListener = object : GestureDetector.SimpleOnGestureListener() {
+    private val _onGestureListener = object : GestureDetector.SimpleOnGestureListener() {
         // フリックイベント
         override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if (_currentBlock == null)
@@ -158,35 +183,37 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun update() {
-        _currentBlock = _currentBlock ?: _tetrisField.newBlock()
+        if (_currentBlock == null) {
+            _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
+            _nextBlock = _tetrisField.newBlock()
+        }
 
         runOnUiThread {
-            for (y in 0 until _numY) {
-                for (x in 0 until _numX) {
-                    when (_tetrisField.array2d[y][x]) {
-                        Field.Space.EMPTY -> _spaces!![y][x].setBackgroundColor(Color.WHITE)
-                        Field.Space.RECTANGLE -> _spaces!![y][x].setBackgroundColor(Color.DKGRAY)
-                        Field.Space.STRAIGHT -> _spaces!![y][x].setBackgroundColor(Color.RED)
-                        Field.Space.GAP_LEFT -> _spaces!![y][x].setBackgroundColor(Color.MAGENTA)
-                        Field.Space.GAP_RIGHT -> _spaces!![y][x].setBackgroundColor(Color.YELLOW)
-                        Field.Space.HOOK_LEFT -> _spaces!![y][x].setBackgroundColor(Color.GREEN)
-                        Field.Space.HOOK_RIGHT -> _spaces!![y][x].setBackgroundColor(Color.BLUE)
-                        Field.Space.HOOK_CENTER -> _spaces!![y][x].setBackgroundColor(Color.CYAN)
-                    }
-                }
-            }
+            for (y in 0 until _numY)
+                for (x in 0 until _numX)
+                    _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.array2d[y][x]))
 
-            for (p in _currentBlock?.positions() ?: arrayOf()) {
-                when (_currentBlock?.space) {
-                    Field.Space.RECTANGLE -> _spaces!![p.y][p.x].setBackgroundColor(Color.DKGRAY)
-                    Field.Space.STRAIGHT -> _spaces!![p.y][p.x].setBackgroundColor(Color.RED)
-                    Field.Space.GAP_LEFT -> _spaces!![p.y][p.x].setBackgroundColor(Color.MAGENTA)
-                    Field.Space.GAP_RIGHT -> _spaces!![p.y][p.x].setBackgroundColor(Color.YELLOW)
-                    Field.Space.HOOK_LEFT -> _spaces!![p.y][p.x].setBackgroundColor(Color.GREEN)
-                    Field.Space.HOOK_RIGHT -> _spaces!![p.y][p.x].setBackgroundColor(Color.BLUE)
-                    Field.Space.HOOK_CENTER -> _spaces!![p.y][p.x].setBackgroundColor(Color.CYAN)
-                }
-            }
+            for (p in _currentBlock?.positions() ?: arrayOf())
+                _spaces[p.y][p.x].setBackgroundColor(colorOf(_currentBlock!!.space))
+
+            for (y in 0 until _nextBlockNumY)
+                for (x in 0 until _nextBlockNumX)
+                    _nextBlockSpace[y][x].setBackgroundColor(Color.WHITE)
+            for (p in _nextBlock?.shape() ?: arrayOf())
+                _nextBlockSpace[p.y][p.x].setBackgroundColor(colorOf(_nextBlock!!.space))
+        }
+    }
+
+    private fun colorOf(blockType: Field.Space): Int {
+        return when (blockType) {
+            Field.Space.RECTANGLE -> Color.DKGRAY
+            Field.Space.STRAIGHT -> Color.RED
+            Field.Space.GAP_LEFT -> Color.MAGENTA
+            Field.Space.GAP_RIGHT -> Color.YELLOW
+            Field.Space.HOOK_LEFT -> Color.GREEN
+            Field.Space.HOOK_RIGHT -> Color.BLUE
+            Field.Space.HOOK_CENTER -> Color.CYAN
+            else -> Color.WHITE
         }
     }
 

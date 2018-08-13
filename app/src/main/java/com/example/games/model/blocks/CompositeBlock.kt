@@ -11,7 +11,7 @@ class CompositeBlock(
 ) : IBlock {
     protected var _current = 0
 
-    private fun shape(): Array<Position> {
+    fun shape(): Array<Position> {
         return _shapes[_current]
     }
 
