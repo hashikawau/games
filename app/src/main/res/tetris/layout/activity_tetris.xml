@@ -66,6 +66,34 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/textView_label_erased_lines"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/textView_label_erased_lines"
+                app:layout_constraintBottom_toTopOf="@+id/textView_label_score"
+                app:layout_constraintEnd_toStartOf="@+id/textView_value_erased_lines"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView_value_erased_lines"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="0"
+                app:layout_constraintBaseline_toBaselineOf="@+id/textView_label_erased_lines"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textView_label_erased_lines" />
+
+            <TextView
                 android:id="@+id/textView_label_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,12 +101,12 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/textView_label_score"
-                app:layout_constraintBottom_toTopOf="@+id/textView_label_erased_lines"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/textView_value_score"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_label_erased_lines"
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintVertical_bias="0.0" />
 
@@ -88,38 +116,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:text="9999999"
+                android:text="0"
                 app:layout_constraintBaseline_toBaselineOf="@+id/textView_label_score"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/textView_label_score" />
-
-            <TextView
-                android:id="@+id/textView_label_erased_lines"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/textView_label_erased_lines"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView_value_erased_lines"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_label_score"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/textView_value_erased_lines"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:text="9999999"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textView_label_erased_lines"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/textView_label_erased_lines" />
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 

@@ -4,7 +4,5 @@
     screen of game over
     screen of pause
     animation when erase lines
-    show number of erased lines
-    show score
     play sounds
 

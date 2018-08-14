@@ -1,5 +1,6 @@
 package com.example.games.tetris.screen
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Bundle
@@ -18,6 +19,8 @@ import java.util.*
 
 
 class TetrisActivity : AppCompatActivity() {
+    val TETRIS_RESULT_ERASED_LINES = "tetris_result_erased_lines"
+    val TETRIS_RESULT_SCORE = "tetris_result_score"
 
     private val _numX = 10
     private val _numY = 18
@@ -28,8 +31,8 @@ class TetrisActivity : AppCompatActivity() {
     private var _spaces = Array(0) { Array(0) { View(null) } }
     private var _blockSize = 0
 
-    private var _score = 0
     private var _erasedLines = 0
+    private var _score = 0
 
     //
     private var _drawingTimer: Timer? = null
@@ -52,8 +55,8 @@ class TetrisActivity : AppCompatActivity() {
         _nextBlock = _tetrisField.newBlock()
 
 
-        findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
         findViewById<TextView>(R.id.textView_value_erased_lines).setText(_erasedLines.toString())
+        findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
     }
 
     override fun onResume() {
@@ -222,7 +225,7 @@ class TetrisActivity : AppCompatActivity() {
         }
     }
 
-    private val SLEEP_TIME_FOR_ERASE = 500L
+    private val SLEEP_TIME_FOR_ERASE = 250L
 
     private fun update() {
         runOnUiThread {
@@ -242,13 +245,28 @@ class TetrisActivity : AppCompatActivity() {
 
         val erased = _tetrisField.erasedLines()
         if (erased.size > 0) {
+
             Thread.sleep(SLEEP_TIME_FOR_ERASE)
 
-            _score += calculateScore(erased.size)
-            _erasedLines += erased.size
             runOnUiThread {
-                findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
+                for (y in 0 until _numY) {
+                    if (erased.contains(y)) {
+                        for (x in 0 until _numX)
+                            _spaces[y][x].setBackgroundColor(Color.WHITE)
+                    } else {
+                        for (x in 0 until _numX)
+                            _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.array2d[y][x]))
+                    }
+                }
+            }
+
+            Thread.sleep(SLEEP_TIME_FOR_ERASE)
+
+            _erasedLines += erased.size
+            _score += calculateScore(erased.size)
+            runOnUiThread {
                 findViewById<TextView>(R.id.textView_value_erased_lines).setText(_erasedLines.toString())
+                findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
             }
 
             _tetrisField.erase()
@@ -260,6 +278,13 @@ class TetrisActivity : AppCompatActivity() {
 
             if (_tetrisField.array2d[0].any { space -> space != Field.Space.EMPTY }) {
                 showGameOver()
+                Thread.sleep(500)
+
+                val intent = Intent()
+                intent.putExtra(TETRIS_RESULT_ERASED_LINES, _erasedLines)
+                intent.putExtra(TETRIS_RESULT_SCORE, _score)
+                setResult(RESULT_OK, intent);
+                finish()
             }
         }
     }

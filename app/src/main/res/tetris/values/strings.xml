@@ -7,4 +7,5 @@
     <string name="button_rotate_right">)</string>
     <string name="textView_label_score">SCORE</string>
     <string name="textView_label_erased_lines">LINES</string>
+    <string name="start">START</string>
 </resources>
