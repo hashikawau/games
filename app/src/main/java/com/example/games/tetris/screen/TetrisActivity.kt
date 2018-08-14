@@ -31,11 +31,11 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private val _tetrisField = TetrisField(TETRIS_FIELD_WIDTH, TETRIS_FIELD_HEIGHT, Random(Date().time))
+    private var _currentBlock: CompositeBlock? = null
+    private var _nextBlock: CompositeBlock? = null
 
     private var _speed = 0.0 // [0.0 ~ 1.0]
 
-    private var _currentBlock: CompositeBlock? = null
-    private var _nextBlock: CompositeBlock? = null
 
     private var _tetrisFieldSpaces = Array(0) { Array(0) { View(null) } }
     private var _nextBlockSpace = Array(0) { Array(0) { View(null) } }
@@ -51,18 +51,14 @@ class TetrisActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tetris)
 
         _speed = intent.getDoubleExtra(TETRIS_ARGUMENTS_SPEED, 0.0)
-        _lastDownedTimeMillis = System.currentTimeMillis()
-
-        _tetrisFieldSpaces = Array(TETRIS_FIELD_HEIGHT) { Array(TETRIS_FIELD_WIDTH) { View(this) } }
-        initLayoutTetrisField(_tetrisFieldSpaces)
-
-        _nextBlockSpace = Array(NEXT_BLOCK_HEIGHT) { Array(NEXT_BLOCK_WIDTH) { View(this) } }
-        initLayoutNextBlock(_nextBlockSpace)
-
-        _gestureDetector = GestureDetector(this, _onGestureListener)
-
         _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
         _nextBlock = _tetrisField.newBlock()
+        _lastDownedTimeMillis = System.currentTimeMillis()
+
+        initTetrisField()
+        initNextBlock()
+
+        _gestureDetector = GestureDetector(this, _onGestureListener)
 
         findViewById<TextView>(R.id.textView_value_erased_lines).setText(_erasedLines.toString())
         findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
@@ -78,35 +74,21 @@ class TetrisActivity : AppCompatActivity() {
         pauseTimer()
     }
 
-    private fun initLayoutTetrisField(spaces: Array<Array<View>>) {
-        val height = spaces.size
-        val width = spaces[0].size
-
-        val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
-        for (y in 0 until height) {
-            val tableRow = TableRow(this)
-            for (x in 0 until width)
-                tableRow.addView(spaces[y][x])
-            tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
-        }
-
-        val layout = findViewById<View>(R.id.layout_contents_game);
-        layout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                val viewSize = Math.min(layout.measuredWidth / width, layout.measuredHeight / height)
-                for (y in 0 until height)
-                    for (x in 0 until width)
-                        spaces[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
-            }
-        })
+    private fun initTetrisField() {
+        _tetrisFieldSpaces = Array(TETRIS_FIELD_HEIGHT) { Array(TETRIS_FIELD_WIDTH) { View(this) } }
+        initTableLayout(_tetrisFieldSpaces, R.id.tableLayout, R.id.layout_contents_game)
     }
 
-    private fun initLayoutNextBlock(spaces: Array<Array<View>>) {
+    private fun initNextBlock() {
+        _nextBlockSpace = Array(NEXT_BLOCK_HEIGHT) { Array(NEXT_BLOCK_WIDTH) { View(this) } }
+        initTableLayout(_nextBlockSpace, R.id.tableLayout_next_block, R.id.tableLayout_next_block)
+    }
+
+    private fun initTableLayout(spaces: Array<Array<View>>, tableLayoutId: Int, layoutContents: Int) {
         val height = spaces.size
         val width = spaces[0].size
 
-        val tableLayout = findViewById<TableLayout>(R.id.tableLayout_next_block)
+        val tableLayout = findViewById<TableLayout>(tableLayoutId)
         for (y in 0 until height) {
             val tableRow = TableRow(this)
             for (x in 0 until width)
@@ -114,7 +96,7 @@ class TetrisActivity : AppCompatActivity() {
             tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
         }
 
-        val layout = findViewById<View>(R.id.tableLayout_next_block);
+        val layout = findViewById<View>(layoutContents);
         layout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
