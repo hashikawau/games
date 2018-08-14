@@ -1,7 +1,7 @@
 //package com.example.games
 //
 //import com.example.games.model.blocks.makeSingleBlock
-//import com.example.games.model.Field;
+//import com.example.games.model.TetrisField;
 //import org.junit.Test
 //
 //import org.junit.Assert.*
@@ -9,7 +9,7 @@
 //class TetrisModelTest {
 //    @Test
 //    fun field_init_isCorrect() {
-//        val field = Field(4, 6)
+//        val field = TetrisField(4, 6)
 //        assertEquals("""
 //            |    |
 //            |    |
@@ -22,7 +22,7 @@
 //
 //    @Test
 //    fun field_fix_isCorrect() {
-//        val field = Field(4, 6)
+//        val field = TetrisField(4, 6)
 //        val block = makeSingleBlock(field)
 //        block.moveTo(1, 5)
 //        block.fixToField()
@@ -38,7 +38,7 @@
 //
 //    @Test
 //    fun block_moveToRightEnd_isCorrect() {
-//        val field = Field(4, 1)
+//        val field = TetrisField(4, 1)
 //        val block = makeSingleBlock(field)
 //        assertEquals(true, block.moveToRight())
 //        assertEquals(1, block.x)
@@ -60,7 +60,7 @@
 //
 //    @Test
 //    fun block_moveToRightBlock_isCorrect() {
-//        val field = with(Field(4, 1)) {
+//        val field = with(TetrisField(4, 1)) {
 //            val block = makeSingleBlock(this)
 //            while (block.moveToRight()) {
 //            }
@@ -85,7 +85,7 @@
 //
 //    @Test
 //    fun block_moveToLeftEnd_isCorrect() {
-//        val field = Field(4, 1)
+//        val field = TetrisField(4, 1)
 //        val block = with(makeSingleBlock(field)) {
 //            while (this.moveToRight()) {
 //            }
@@ -111,7 +111,7 @@
 //
 //    @Test
 //    fun block_moveToLeftBlock_isCorrect() {
-//        val field = with(Field(4, 1)) {
+//        val field = with(TetrisField(4, 1)) {
 //            val block = makeSingleBlock(this)
 //            block.fixToField()
 //            this
@@ -138,7 +138,7 @@
 //
 //    @Test
 //    fun block_moveToDownEnd_isCorrect() {
-//        val field = Field(1, 6)
+//        val field = TetrisField(1, 6)
 //        val block = makeSingleBlock(field)
 //        assertEquals(true, block.moveToDown())
 //        assertEquals(0, block.x)
@@ -171,7 +171,7 @@
 //
 //    @Test
 //    fun block_moveToDownBlock_isCorrect() {
-//        val field = with(Field(1, 6)) {
+//        val field = with(TetrisField(1, 6)) {
 //            val block = makeSingleBlock(this)
 //            while (block.moveToDown()) {}
 //            block.fixToField()
@@ -206,7 +206,7 @@
 //
 //    @Test
 //    fun field_erase_isCorrect() {
-//        val field = with(Field(4, 6)) {
+//        val field = with(TetrisField(4, 6)) {
 //            with(makeSingleBlock(this)) { moveTo(0, 5); fixToField() }
 //            with(makeSingleBlock(this)) { moveTo(1, 5); fixToField() }
 //            with(makeSingleBlock(this)) { moveTo(2, 5); fixToField() }

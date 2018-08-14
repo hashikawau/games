@@ -1,9 +1,9 @@
 package com.example.games.model.blocks
 
-import com.example.games.model.Field
+import com.example.games.model.TetrisField
 
 fun makeSingleBlock(
-        field: Field,
+        field: TetrisField,
         x: Int = 0,
         y: Int = 0
 ): CompositeBlock {
@@ -11,7 +11,7 @@ fun makeSingleBlock(
             arrayOf(arrayOf(
                     Position(0, 0))),
             field,
-            Field.Space.RECTANGLE,
+            TetrisField.Space.RECTANGLE,
             x,
             y)
 }
@@ -23,7 +23,7 @@ fun makeSingleBlock(
  * ....
  */
 fun makeRectangleBlock(
-        field: Field,
+        field: TetrisField,
         x: Int = 0,
         y: Int = 0
 ): CompositeBlock {
@@ -34,7 +34,7 @@ fun makeRectangleBlock(
                     Position(2, 1),
                     Position(2, 2))),
             field,
-            Field.Space.RECTANGLE,
+            TetrisField.Space.RECTANGLE,
             x,
             y)
 }
@@ -46,7 +46,7 @@ fun makeRectangleBlock(
  * .o..    ....
  */
 fun makeStraightBlock(
-        field: Field,
+        field: TetrisField,
         x: Int = 0,
         y: Int = 0
 ): CompositeBlock {
@@ -61,7 +61,7 @@ fun makeStraightBlock(
                             Position(2, 1),
                             Position(3, 1))),
             field,
-            Field.Space.STRAIGHT,
+            TetrisField.Space.STRAIGHT,
             x,
             y)
 }
@@ -73,7 +73,7 @@ fun makeStraightBlock(
  * ....    ....
  */
 fun makeGapLeftBlock(
-        field: Field,
+        field: TetrisField,
         x: Int = 0,
         y: Int = 0
 ): CompositeBlock {
@@ -88,7 +88,7 @@ fun makeGapLeftBlock(
                             Position(2, 1),
                             Position(3, 1))),
             field,
-            Field.Space.GAP_LEFT,
+            TetrisField.Space.GAP_LEFT,
             x,
             y)
 }
@@ -100,7 +100,7 @@ fun makeGapLeftBlock(
  * ....    ....
  */
 fun makeGapRightBlock(
-        field: Field,
+        field: TetrisField,
         x: Int = 0,
         y: Int = 0
 ): CompositeBlock {
@@ -115,7 +115,7 @@ fun makeGapRightBlock(
                             Position(1, 1),
                             Position(2, 0))),
             field,
-            Field.Space.GAP_RIGHT,
+            TetrisField.Space.GAP_RIGHT,
             x,
             y)
 }
@@ -127,7 +127,7 @@ fun makeGapRightBlock(
  * ....    ....    ....    ....
  */
 fun makeHookLeftBlock(
-        field: Field,
+        field: TetrisField,
         x: Int = 0,
         y: Int = 0
 ): CompositeBlock {
@@ -150,7 +150,7 @@ fun makeHookLeftBlock(
                             Position(2, 1),
                             Position(3, 1))),
             field,
-            Field.Space.HOOK_LEFT,
+            TetrisField.Space.HOOK_LEFT,
             x,
             y)
 }
@@ -162,7 +162,7 @@ fun makeHookLeftBlock(
  * ....    ....    ....    ....
  */
 fun makeHookRightBlock(
-        field: Field,
+        field: TetrisField,
         x: Int = 0,
         y: Int = 0
 ): CompositeBlock {
@@ -185,7 +185,7 @@ fun makeHookRightBlock(
                             Position(2, 0),
                             Position(3, 0))),
             field,
-            Field.Space.HOOK_RIGHT,
+            TetrisField.Space.HOOK_RIGHT,
             x,
             y)
 }
@@ -197,7 +197,7 @@ fun makeHookRightBlock(
  * ....    ....    ....    ....
  */
 fun makeHookCenterBlock(
-        field: Field,
+        field: TetrisField,
         x: Int = 0,
         y: Int = 0
 ): CompositeBlock {
@@ -220,7 +220,7 @@ fun makeHookCenterBlock(
                             Position(1, 1),
                             Position(1, 2))),
             field,
-            Field.Space.HOOK_CENTER,
+            TetrisField.Space.HOOK_CENTER,
             x,
             y)
 }

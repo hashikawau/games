@@ -3,7 +3,7 @@ package com.example.games.model
 import com.example.games.model.blocks.*
 import java.util.*
 
-class Field(
+class TetrisField(
         val width: Int,
         val height: Int,
         private val _random: Random = Random(0)

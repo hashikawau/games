@@ -1,6 +1,6 @@
 package com.example.games
 
-import com.example.games.model.Field
+import com.example.games.model.TetrisField
 import com.example.games.model.blocks.makeRectangleBlock
 import com.example.games.model.blocks.makeSingleBlock
 import org.junit.Assert.assertEquals
@@ -9,7 +9,7 @@ import org.junit.Test
 class makeRectangleBlockTest {
     private val _width = 4
     private val _height = 4
-    private var _field: Field = Field(_width, _height)
+    private var _field: TetrisField = TetrisField(_width, _height)
 
     @Test
     fun block_init_isCorrect() {
@@ -25,7 +25,7 @@ class makeRectangleBlockTest {
     class MoveToRightTest {
         private val _width = 5
         private val _height = 4
-        private var _field: Field = Field(_width, _height)
+        private var _field: TetrisField = TetrisField(_width, _height)
 
         @Test
         fun canMove() {
@@ -115,7 +115,7 @@ class makeRectangleBlockTest {
     class MoveToLeftTest {
         private val _width = 5
         private val _height = 4
-        private var _field: Field = Field(_width, _height)
+        private var _field: TetrisField = TetrisField(_width, _height)
 
         @Test
         fun canMove() {
@@ -205,7 +205,7 @@ class makeRectangleBlockTest {
     class MoveToDownTest {
         @Test
         fun canMove() {
-            val field = Field(4, 4)
+            val field = TetrisField(4, 4)
             val block = makeRectangleBlock(field, 1, 1)
             assertEquals(true, block.moveToDown())
 
@@ -220,7 +220,7 @@ class makeRectangleBlockTest {
 
         @Test
         fun cannotMove_exceedGround() {
-            val field = Field(4, 4)
+            val field = TetrisField(4, 4)
             val block = makeRectangleBlock(field, 1, 2)
             assertEquals(false, block.moveToDown())
 
@@ -235,7 +235,7 @@ class makeRectangleBlockTest {
 
         @Test
         fun cannotMove_exceedBlock_1() {
-            val field = Field(4, 4)
+            val field = TetrisField(4, 4)
             makeSingleBlock(field, 1, 3).fixToField()
             assertEquals("""
             |    |
@@ -258,7 +258,7 @@ class makeRectangleBlockTest {
 
         @Test
         fun cannotMove_exceedBlock_2() {
-            val field = Field(4, 4)
+            val field = TetrisField(4, 4)
             makeSingleBlock(field, 2, 3).fixToField()
             assertEquals("""
             |    |
@@ -283,7 +283,7 @@ class makeRectangleBlockTest {
     class RotateRightTest {
         @Test
         fun canRotate() {
-            val field = Field(4, 4)
+            val field = TetrisField(4, 4)
             val block = makeRectangleBlock(field, 1, 1)
             assertEquals(true, block.rotateRight())
 
@@ -300,7 +300,7 @@ class makeRectangleBlockTest {
     class RotateLeftTest {
         @Test
         fun canRotate() {
-            val field = Field(4, 4)
+            val field = TetrisField(4, 4)
             val block = makeRectangleBlock(field, 1, 1)
             assertEquals(true, block.rotateLeft())
 

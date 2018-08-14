@@ -13,7 +13,7 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import com.example.games.R
-import com.example.games.model.Field
+import com.example.games.model.TetrisField
 import com.example.games.model.blocks.CompositeBlock
 import java.util.*
 import kotlin.math.roundToInt
@@ -30,7 +30,7 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private var _speed = 0.0 // [0.0 ~ 1.0]
-    private val _tetrisField = Field(WIDTH, HEIGHT, Random(Date().time))
+    private val _tetrisField = TetrisField(WIDTH, HEIGHT, Random(Date().time))
 
     private var _currentBlock: CompositeBlock? = null
     private var _nextBlock: CompositeBlock? = null
@@ -281,15 +281,15 @@ class TetrisActivity : AppCompatActivity() {
         return (SCORE_TABLE[erasedLines] * (0.5 + 0.5 * _speed)).roundToInt()
     }
 
-    private fun colorOf(blockType: Field.Space?): Int {
+    private fun colorOf(blockType: TetrisField.Space?): Int {
         return when (blockType) {
-            Field.Space.RECTANGLE -> Color.DKGRAY
-            Field.Space.STRAIGHT -> Color.RED
-            Field.Space.GAP_LEFT -> Color.YELLOW
-            Field.Space.GAP_RIGHT -> Color.MAGENTA
-            Field.Space.HOOK_LEFT -> Color.BLUE
-            Field.Space.HOOK_RIGHT -> Color.GREEN
-            Field.Space.HOOK_CENTER -> Color.CYAN
+            TetrisField.Space.RECTANGLE -> Color.DKGRAY
+            TetrisField.Space.STRAIGHT -> Color.RED
+            TetrisField.Space.GAP_LEFT -> Color.YELLOW
+            TetrisField.Space.GAP_RIGHT -> Color.MAGENTA
+            TetrisField.Space.HOOK_LEFT -> Color.BLUE
+            TetrisField.Space.HOOK_RIGHT -> Color.GREEN
+            TetrisField.Space.HOOK_CENTER -> Color.CYAN
             else -> Color.WHITE
         }
     }
@@ -347,7 +347,7 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun isGameOver(): Boolean {
-        return _tetrisField.array2d[0].any { space -> space != Field.Space.EMPTY }
+        return _tetrisField.array2d[0].any { space -> space != TetrisField.Space.EMPTY }
     }
 
     private fun showGameOver() {

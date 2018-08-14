@@ -1,11 +1,11 @@
 package com.example.games.model.blocks
 
-import com.example.games.model.Field
+import com.example.games.model.TetrisField
 
 class CompositeBlock(
         protected val _shapes: Array<Array<Position>>,
-        protected val _field: Field,
-        public val space: Field.Space,
+        protected val _field: TetrisField,
+        public val space: TetrisField.Space,
         protected var _x: Int,
         protected var _y: Int
 ) : IBlock {

@@ -1,6 +1,6 @@
 package com.example.games
 
-import com.example.games.model.Field
+import com.example.games.model.TetrisField
 import com.example.games.model.blocks.makeSingleBlock
 import com.example.games.model.blocks.makeStraightBlock
 import org.junit.Assert.assertEquals
@@ -11,11 +11,11 @@ class StraightBlockTest {
     class VerticalStraightBlockTest {
         private val _width = 3
         private val _height = 6
-        private var _field: Field = Field(_width, _height)
+        private var _field: TetrisField = TetrisField(_width, _height)
 
         @Before
         fun before() {
-            _field = Field(_width, _height)
+            _field = TetrisField(_width, _height)
         }
 
         @Test
@@ -34,11 +34,11 @@ class StraightBlockTest {
         class MoveToRightTest {
             private val _width = 3
             private val _height = 6
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
@@ -192,11 +192,11 @@ class StraightBlockTest {
         class MoveToLeftTest {
             private val _width = 3
             private val _height = 6
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
@@ -350,11 +350,11 @@ class StraightBlockTest {
         class MoveToDownTest {
             private val _width = 3
             private val _height = 9
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
@@ -454,11 +454,11 @@ class StraightBlockTest {
         class RotateRightTest {
             private val _width = 4
             private val _height = 4
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
@@ -589,11 +589,11 @@ class StraightBlockTest {
         class RotateLeftTest {
             private val _width = 4
             private val _height = 4
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
@@ -725,12 +725,12 @@ class StraightBlockTest {
     class HorizontalStraightBlockTest {
         private val _width = 3
         private val _height = 6
-        private var _field = Field(_width, _height)
+        private var _field = TetrisField(_width, _height)
         private var _block = makeStraightBlock(_field)
 
         @Before
         fun before() {
-            _field = Field(_width, _height)
+            _field = TetrisField(_width, _height)
             _block = makeStraightBlock(_field)
         }
 
@@ -752,11 +752,11 @@ class StraightBlockTest {
         class MoveToRightTest {
             private val _width = 3
             private val _height = 6
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
@@ -910,11 +910,11 @@ class StraightBlockTest {
         class MoveToLeftTest {
             private val _width = 3
             private val _height = 6
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
@@ -1068,11 +1068,11 @@ class StraightBlockTest {
         class MoveToDownTest {
             private val _width = 3
             private val _height = 9
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
@@ -1172,11 +1172,11 @@ class StraightBlockTest {
         class RotateRightTest {
             private val _width = 4
             private val _height = 4
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
@@ -1307,11 +1307,11 @@ class StraightBlockTest {
         class RotateLeftTest {
             private val _width = 4
             private val _height = 4
-            private var _field: Field = Field(_width, _height)
+            private var _field: TetrisField = TetrisField(_width, _height)
 
             @Before
             fun before() {
-                _field = Field(_width, _height)
+                _field = TetrisField(_width, _height)
             }
 
             @Test
