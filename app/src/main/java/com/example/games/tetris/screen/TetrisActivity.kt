@@ -31,19 +31,16 @@ class TetrisActivity : AppCompatActivity() {
 
     private var _speed = 0.0 // [0.0 ~ 1.0]
     private val _tetrisField = Field(WIDTH, HEIGHT, Random(Date().time))
-    
+
     private var _currentBlock: CompositeBlock? = null
     private var _nextBlock: CompositeBlock? = null
     private var _spaces = Array(0) { Array(0) { View(null) } }
-    private var _blockSize = 0
 
     private var _erasedLines = 0
     private var _score = 0
 
-    //
     private var _lastDownedTimeMillis = 0L
     private var _drawingTimer: Timer? = null
-//    private var _downingTimer: Timer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,14 +77,13 @@ class TetrisActivity : AppCompatActivity() {
 
         val displaySize = Point()
         windowManager.defaultDisplay.getSize(displaySize)
-        _blockSize = 1;//Math.min(displaySize.x / WIDTH, (displaySize.y - HEIGHT_OF_TITLE_BAR) / HEIGHT)
 
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
         for (y in 0 until _tetrisField.height) {
             val tableRow = TableRow(this)
             tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
             for (x in 0 until _tetrisField.width) {
-                _spaces!![y][x].layoutParams = TableRow.LayoutParams(_blockSize, _blockSize)
+                _spaces!![y][x].layoutParams = TableRow.LayoutParams()
                 tableRow.addView(_spaces!![y][x])
             }
             tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
@@ -99,10 +95,10 @@ class TetrisActivity : AppCompatActivity() {
                 layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 val width = layout.measuredWidth;
                 val height = layout.measuredHeight;
-                _blockSize = Math.min(width / _tetrisField.width, height / _tetrisField.height)
+                val viewSize = Math.min(width / _tetrisField.width, height / _tetrisField.height)
                 for (y in 0 until _tetrisField.height)
                     for (x in 0 until _tetrisField.width)
-                        _spaces[y][x].layoutParams = TableRow.LayoutParams(_blockSize, _blockSize);
+                        _spaces[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
             }
         })
     }
@@ -204,7 +200,7 @@ class TetrisActivity : AppCompatActivity() {
         return super.onTouchEvent(event);
     }
 
-    private val FLICK_THRESHOLD_DISTANCE = _blockSize
+    private val FLICK_THRESHOLD_DISTANCE = 30
 
     // タッチイベントのリスナー
     private val _onGestureListener = object : GestureDetector.SimpleOnGestureListener() {
