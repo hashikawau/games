@@ -19,6 +19,10 @@ class CompositeBlock(
         return shape().map { p -> Position(_x + p.x, _y + p.y) }.toTypedArray()
     }
 
+    fun canFixToField(): Boolean {
+        return positions().all { p -> _field.isEmpty(p.x, p.y) }
+    }
+
     override fun fixToField() {
         positions().forEach { p -> _field.setCell(p.x, p.y, space) }
     }
