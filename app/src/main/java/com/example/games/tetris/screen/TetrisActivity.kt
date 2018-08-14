@@ -307,10 +307,10 @@ class TetrisActivity : AppCompatActivity() {
         return when (blockType) {
             Field.Space.RECTANGLE -> Color.DKGRAY
             Field.Space.STRAIGHT -> Color.RED
-            Field.Space.GAP_LEFT -> Color.MAGENTA
-            Field.Space.GAP_RIGHT -> Color.YELLOW
-            Field.Space.HOOK_LEFT -> Color.GREEN
-            Field.Space.HOOK_RIGHT -> Color.BLUE
+            Field.Space.GAP_LEFT -> Color.YELLOW
+            Field.Space.GAP_RIGHT -> Color.MAGENTA
+            Field.Space.HOOK_LEFT -> Color.BLUE
+            Field.Space.HOOK_RIGHT -> Color.GREEN
             Field.Space.HOOK_CENTER -> Color.CYAN
             else -> Color.WHITE
         }

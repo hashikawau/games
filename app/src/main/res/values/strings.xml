@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">games</string>
+    <string name="textView_label_select_game">Select a game to play</string>
 </resources>
