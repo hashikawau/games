@@ -26,6 +26,7 @@ android {
     sourceSets {
         main {
             res.srcDirs = [
+                    'src/main/res/breakblocks',
                     'src/main/res/tetris',
                     'src/main/res',
             ]

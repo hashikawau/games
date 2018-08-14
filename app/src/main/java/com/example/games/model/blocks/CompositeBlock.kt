@@ -74,16 +74,3 @@ class CompositeBlock(
         }
     }
 }
-
-class Position(val x: Int, val y: Int) {
-    fun rotateRight(): Position {
-        return Position(y, -x)
-    }
-    fun rotateLeft(): Position {
-        return Position(-y, x)
-    }
-
-    override fun toString(): String {
-        return "P(%d,%d)".format(x, y)
-    }
-}
