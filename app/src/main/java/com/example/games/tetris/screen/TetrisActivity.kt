@@ -25,17 +25,21 @@ class TetrisActivity : AppCompatActivity() {
         val TETRIS_RESULT_ERASED_LINES = "tetris_result_erased_lines"
         val TETRIS_RESULT_SCORE = "tetris_result_score"
 
-        private val WIDTH = 10
-        private val HEIGHT = 18
+        private val TETRIS_FIELD_WIDTH = 10
+        private val TETRIS_FIELD_HEIGHT = 18
+        private val NEXT_BLOCK_WIDTH = 4
+        private val NEXT_BLOCK_HEIGHT = 4
     }
 
-    private val _tetrisField = TetrisField(WIDTH, HEIGHT, Random(Date().time))
+    private val _tetrisField = TetrisField(TETRIS_FIELD_WIDTH, TETRIS_FIELD_HEIGHT, Random(Date().time))
 
     private var _speed = 0.0 // [0.0 ~ 1.0]
 
     private var _currentBlock: CompositeBlock? = null
     private var _nextBlock: CompositeBlock? = null
-    private var _spaces = Array(0) { Array(0) { View(null) } }
+
+    private var _tetrisFieldSpaces = Array(0) { Array(0) { View(null) } }
+    private var _nextBlockSpace = Array(0) { Array(0) { View(null) } }
 
     private var _erasedLines = 0
     private var _score = 0
@@ -73,18 +77,15 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun initLayoutTetrisField() {
-        _spaces = Array(_tetrisField.height) { Array(_tetrisField.width) { View(this) } }
-
-        val displaySize = Point()
-        windowManager.defaultDisplay.getSize(displaySize)
+        _tetrisFieldSpaces = Array(_tetrisField.height) { Array(_tetrisField.width) { View(this) } }
 
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
         for (y in 0 until _tetrisField.height) {
             val tableRow = TableRow(this)
             tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
             for (x in 0 until _tetrisField.width) {
-                _spaces!![y][x].layoutParams = TableRow.LayoutParams()
-                tableRow.addView(_spaces!![y][x])
+                _tetrisFieldSpaces!![y][x].layoutParams = TableRow.LayoutParams()
+                tableRow.addView(_tetrisFieldSpaces!![y][x])
             }
             tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
         }
@@ -98,24 +99,19 @@ class TetrisActivity : AppCompatActivity() {
                 val viewSize = Math.min(width / _tetrisField.width, height / _tetrisField.height)
                 for (y in 0 until _tetrisField.height)
                     for (x in 0 until _tetrisField.width)
-                        _spaces[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
+                        _tetrisFieldSpaces[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
             }
         })
     }
 
-    private val _nextBlockNumX = 4
-    private val _nextBlockNumY = 4
-//    private val _nextBlockSize = 1
-    private var _nextBlockSpace = Array(0) { Array(0) { View(null) } }
-
     private fun initLayoutNextBlock() {
-        _nextBlockSpace = Array(_nextBlockNumY) { Array(_nextBlockNumX) { View(this) } }
+        _nextBlockSpace = Array(NEXT_BLOCK_HEIGHT) { Array(NEXT_BLOCK_WIDTH) { View(this) } }
 
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout_next_block)
-        for (y in 0 until _nextBlockNumY) {
+        for (y in 0 until NEXT_BLOCK_HEIGHT) {
             val tableRow = TableRow(this)
             tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
-            for (x in 0 until _nextBlockNumX) {
+            for (x in 0 until NEXT_BLOCK_WIDTH) {
                 _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams()
                 tableRow.addView(_nextBlockSpace[y][x])
             }
@@ -128,9 +124,9 @@ class TetrisActivity : AppCompatActivity() {
                 layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 val width = layout.measuredWidth;
                 val height = layout.measuredHeight;
-                val viewSize = Math.min(width / _nextBlockNumX, height / _nextBlockNumY)
-                for (y in 0 until _nextBlockNumY)
-                    for (x in 0 until _nextBlockNumX)
+                val viewSize = Math.min(width / NEXT_BLOCK_WIDTH, height / NEXT_BLOCK_HEIGHT)
+                for (y in 0 until NEXT_BLOCK_HEIGHT)
+                    for (x in 0 until NEXT_BLOCK_WIDTH)
                         _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
             }
         })
@@ -252,13 +248,13 @@ class TetrisActivity : AppCompatActivity() {
         runOnUiThread {
             for (y in 0 until _tetrisField.height)
                 for (x in 0 until _tetrisField.width)
-                    _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.space(y,x)))
+                    _tetrisFieldSpaces[y][x].setBackgroundColor(colorOf(_tetrisField.space(y,x)))
 
             for (p in _currentBlock?.positions() ?: arrayOf())
-                _spaces[p.y][p.x].setBackgroundColor(colorOf(_currentBlock?.space))
+                _tetrisFieldSpaces[p.y][p.x].setBackgroundColor(colorOf(_currentBlock?.space))
 
-            for (y in 0 until _nextBlockNumY)
-                for (x in 0 until _nextBlockNumX)
+            for (y in 0 until NEXT_BLOCK_HEIGHT)
+                for (x in 0 until NEXT_BLOCK_WIDTH)
                     _nextBlockSpace[y][x].setBackgroundColor(Color.WHITE)
             for (p in _nextBlock?.shape() ?: arrayOf())
                 _nextBlockSpace[p.y][p.x].setBackgroundColor(colorOf(_nextBlock?.space))
@@ -312,10 +308,10 @@ class TetrisActivity : AppCompatActivity() {
             for (y in 0 until _tetrisField.height) {
                 if (erased.contains(y)) {
                     for (x in 0 until _tetrisField.width)
-                        _spaces[y][x].setBackgroundColor(Color.WHITE)
+                        _tetrisFieldSpaces[y][x].setBackgroundColor(Color.WHITE)
                 } else {
                     for (x in 0 until _tetrisField.width)
-                        _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.space(y, x)))
+                        _tetrisFieldSpaces[y][x].setBackgroundColor(colorOf(_tetrisField.space(y, x)))
                 }
             }
         }
@@ -342,7 +338,7 @@ class TetrisActivity : AppCompatActivity() {
             Thread.sleep(25)
             runOnUiThread {
                 for (x in 0 until _tetrisField.width)
-                    _spaces!![y][x].setBackgroundColor(Color.GRAY)
+                    _tetrisFieldSpaces!![y][x].setBackgroundColor(Color.GRAY)
             }
         }
 
