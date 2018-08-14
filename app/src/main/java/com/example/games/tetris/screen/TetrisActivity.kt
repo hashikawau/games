@@ -29,8 +29,9 @@ class TetrisActivity : AppCompatActivity() {
         private val HEIGHT = 18
     }
 
-    private var _speed = 0.0 // [0.0 ~ 1.0]
     private val _tetrisField = TetrisField(WIDTH, HEIGHT, Random(Date().time))
+
+    private var _speed = 0.0 // [0.0 ~ 1.0]
 
     private var _currentBlock: CompositeBlock? = null
     private var _nextBlock: CompositeBlock? = null
@@ -44,11 +45,10 @@ class TetrisActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_tetris)
 
         _speed = intent.getDoubleExtra(TETRIS_ARGUMENTS_SPEED, 0.0)
         _lastDownedTimeMillis = System.currentTimeMillis()
-
-        setContentView(R.layout.activity_tetris)
 
         initLayoutTetrisField()
         initLayoutNextBlock()
@@ -105,7 +105,7 @@ class TetrisActivity : AppCompatActivity() {
 
     private val _nextBlockNumX = 4
     private val _nextBlockNumY = 4
-    private val _nextBlockSize = 1
+//    private val _nextBlockSize = 1
     private var _nextBlockSpace = Array(0) { Array(0) { View(null) } }
 
     private fun initLayoutNextBlock() {
@@ -116,7 +116,7 @@ class TetrisActivity : AppCompatActivity() {
             val tableRow = TableRow(this)
             tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
             for (x in 0 until _nextBlockNumX) {
-                _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams(_nextBlockSize, _nextBlockSize)
+                _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams()
                 tableRow.addView(_nextBlockSpace[y][x])
             }
             tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
@@ -128,10 +128,10 @@ class TetrisActivity : AppCompatActivity() {
                 layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 val width = layout.measuredWidth;
                 val height = layout.measuredHeight;
-                val blockSize = Math.min(width / _nextBlockNumX, height / _nextBlockNumY)
+                val viewSize = Math.min(width / _nextBlockNumX, height / _nextBlockNumY)
                 for (y in 0 until _nextBlockNumY)
                     for (x in 0 until _nextBlockNumX)
-                        _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams(blockSize, blockSize);
+                        _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
             }
         })
     }
@@ -168,16 +168,6 @@ class TetrisActivity : AppCompatActivity() {
                         }
                     }
                 }, 0, 50)
-
-        //
-//        val timeSpan = toTimeSpan(_speed)
-//        _downingTimer = Timer()
-//        _downingTimer!!.schedule(
-//                object : TimerTask() {
-//                    override fun run() {
-//                        downBlock()
-//                    }
-//                }, timeSpan, timeSpan)
     }
 
     private fun toTimeSpan(speed: Double): Long {
@@ -188,7 +178,6 @@ class TetrisActivity : AppCompatActivity() {
 
     private fun pauseTimer() {
         _drawingTimer!!.cancel()
-//        _downingTimer!!.cancel()
     }
 
     private var _gestureDetector: GestureDetector? = null
@@ -316,7 +305,6 @@ class TetrisActivity : AppCompatActivity() {
 
     private fun eraseLines() {
         val erased = _tetrisField.erasedLines()
-//                            if (erased.size > 0) {
 
         Thread.sleep(SLEEP_TIME_FOR_ERASE)
 
@@ -343,11 +331,9 @@ class TetrisActivity : AppCompatActivity() {
 
         _tetrisField.erase()
         _lastDownedTimeMillis = System.currentTimeMillis()
-//                            }
     }
 
     private fun isGameOver(): Boolean {
-//        return _tetrisField.array2d[0].any { space -> space != TetrisField.Space.EMPTY }
         return _tetrisField.isGameOver()
     }
 
@@ -361,7 +347,6 @@ class TetrisActivity : AppCompatActivity() {
         }
 
         _drawingTimer!!.cancel()
-//        _downingTimer!!.cancel()
     }
 
 }
