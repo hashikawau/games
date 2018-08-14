@@ -2,7 +2,6 @@ package com.example.games.tetris.screen
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.Point
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.GestureDetector
@@ -54,8 +53,11 @@ class TetrisActivity : AppCompatActivity() {
         _speed = intent.getDoubleExtra(TETRIS_ARGUMENTS_SPEED, 0.0)
         _lastDownedTimeMillis = System.currentTimeMillis()
 
-        initLayoutTetrisField()
-        initLayoutNextBlock()
+        _tetrisFieldSpaces = Array(TETRIS_FIELD_HEIGHT) { Array(TETRIS_FIELD_WIDTH) { View(this) } }
+        initLayoutTetrisField(_tetrisFieldSpaces)
+
+        _nextBlockSpace = Array(NEXT_BLOCK_HEIGHT) { Array(NEXT_BLOCK_WIDTH) { View(this) } }
+        initLayoutNextBlock(_nextBlockSpace)
 
         _gestureDetector = GestureDetector(this, _onGestureListener)
 
@@ -76,17 +78,15 @@ class TetrisActivity : AppCompatActivity() {
         pauseTimer()
     }
 
-    private fun initLayoutTetrisField() {
-        _tetrisFieldSpaces = Array(_tetrisField.height) { Array(_tetrisField.width) { View(this) } }
+    private fun initLayoutTetrisField(spaces: Array<Array<View>>) {
+        val height = spaces.size
+        val width = spaces[0].size
 
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
-        for (y in 0 until _tetrisField.height) {
+        for (y in 0 until height) {
             val tableRow = TableRow(this)
-            tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
-            for (x in 0 until _tetrisField.width) {
-                _tetrisFieldSpaces!![y][x].layoutParams = TableRow.LayoutParams()
-                tableRow.addView(_tetrisFieldSpaces!![y][x])
-            }
+            for (x in 0 until width)
+                tableRow.addView(spaces[y][x])
             tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
         }
 
@@ -94,27 +94,23 @@ class TetrisActivity : AppCompatActivity() {
         layout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                val width = layout.measuredWidth;
-                val height = layout.measuredHeight;
-                val viewSize = Math.min(width / _tetrisField.width, height / _tetrisField.height)
-                for (y in 0 until _tetrisField.height)
-                    for (x in 0 until _tetrisField.width)
-                        _tetrisFieldSpaces[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
+                val viewSize = Math.min(layout.measuredWidth / width, layout.measuredHeight / height)
+                for (y in 0 until height)
+                    for (x in 0 until width)
+                        spaces[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
             }
         })
     }
 
-    private fun initLayoutNextBlock() {
-        _nextBlockSpace = Array(NEXT_BLOCK_HEIGHT) { Array(NEXT_BLOCK_WIDTH) { View(this) } }
+    private fun initLayoutNextBlock(spaces: Array<Array<View>>) {
+        val height = spaces.size
+        val width = spaces[0].size
 
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout_next_block)
-        for (y in 0 until NEXT_BLOCK_HEIGHT) {
+        for (y in 0 until height) {
             val tableRow = TableRow(this)
-            tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
-            for (x in 0 until NEXT_BLOCK_WIDTH) {
-                _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams()
-                tableRow.addView(_nextBlockSpace[y][x])
-            }
+            for (x in 0 until width)
+                tableRow.addView(spaces[y][x])
             tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
         }
 
@@ -122,12 +118,10 @@ class TetrisActivity : AppCompatActivity() {
         layout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                val width = layout.measuredWidth;
-                val height = layout.measuredHeight;
-                val viewSize = Math.min(width / NEXT_BLOCK_WIDTH, height / NEXT_BLOCK_HEIGHT)
-                for (y in 0 until NEXT_BLOCK_HEIGHT)
-                    for (x in 0 until NEXT_BLOCK_WIDTH)
-                        _nextBlockSpace[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
+                val viewSize = Math.min(layout.measuredWidth / width, layout.measuredHeight / height)
+                for (y in 0 until height)
+                    for (x in 0 until width)
+                        spaces[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
             }
         })
     }
@@ -248,7 +242,7 @@ class TetrisActivity : AppCompatActivity() {
         runOnUiThread {
             for (y in 0 until _tetrisField.height)
                 for (x in 0 until _tetrisField.width)
-                    _tetrisFieldSpaces[y][x].setBackgroundColor(colorOf(_tetrisField.space(y,x)))
+                    _tetrisFieldSpaces[y][x].setBackgroundColor(colorOf(_tetrisField.space(y, x)))
 
             for (p in _currentBlock?.positions() ?: arrayOf())
                 _tetrisFieldSpaces[p.y][p.x].setBackgroundColor(colorOf(_currentBlock?.space))
