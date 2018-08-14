@@ -8,40 +8,37 @@ class TetrisField(
         val height: Int,
         private val _random: Random = Random(0)
 ) {
-    enum class Space(val state: Int) {
-        EMPTY(0),
-        RECTANGLE(1),
-        STRAIGHT(2),
-        GAP_LEFT(3),
-        GAP_RIGHT(4),
-        HOOK_LEFT(5),
-        HOOK_RIGHT(6),
-        HOOK_CENTER(7)
+    enum class Space() {
+        EMPTY(),
+        RECTANGLE(),
+        STRAIGHT(),
+        GAP_LEFT(),
+        GAP_RIGHT(),
+        HOOK_LEFT(),
+        HOOK_RIGHT(),
+        HOOK_CENTER()
     }
 
-    private val _array2d: Array<Array<Space>> = Array(height) { Array(width) { Space.EMPTY } }
+    val array2d: Array<Array<Space>> = Array(height) { Array(width) { Space.EMPTY } }
 
-    val array2d
-        get() = _array2d
-
-    private fun isInRange(x: Int, y: Int): Boolean {
-        if (x < 0 || x >= width) {
+    private fun isInRange(j: Int, i: Int): Boolean {
+        if (j < 0 || j >= width) {
             return false
         }
-        if (y < 0 || y >= height) {
+        if (i < 0 || i >= height) {
             return false
         }
         return true
     }
 
-    fun setCell(x: Int, y: Int, space: Space) {
-        if (isInRange(x, y))
-            _array2d[y][x] = space
+    fun setCell(j: Int, i: Int, space: Space) {
+        if (isInRange(j, i))
+            array2d[i][j] = space
     }
 
-    fun isEmpty(x: Int, y: Int): Boolean {
-        return if (isInRange(x, y))
-            _array2d[y][x] == Space.EMPTY
+    fun isEmpty(j: Int, i: Int): Boolean {
+        return if (isInRange(j, i))
+            array2d[i][j] == Space.EMPTY
         else
             false
     }
@@ -61,34 +58,34 @@ class TetrisField(
     }
 
     fun erasedLines(): List<Int> {
-        return _array2d
+        return array2d
                 .mapIndexed({ index, row -> Pair(index, row.all { space -> space != Space.EMPTY }) })
                 .filter { tup -> tup.second }
                 .map { tup -> tup.first }
     }
 
     fun erase() {
-        val anyStoneRows: List<Array<Space>> = _array2d.filter { row -> row.any { space -> space == Space.EMPTY } }
+        val anyStoneRows: List<Array<Space>> = array2d.filter { row -> row.any { space -> space == Space.EMPTY } }
         rearrangeNoStoneRows(anyStoneRows)
         rearrangeAnyStoneRows(anyStoneRows)
     }
 
     private fun rearrangeNoStoneRows(anyStoneRows: List<Array<Space>>) {
         val offset = height - anyStoneRows.size
-        for (y in 0 until (offset)) {
-            _array2d[y] = Array(width) { Space.EMPTY }
+        for (i in 0 until (offset)) {
+            array2d[i] = Array(width) { Space.EMPTY }
         }
     }
 
     private fun rearrangeAnyStoneRows(anyStoneRows: List<Array<Space>>) {
         val offset = height - anyStoneRows.size
-        for (y in offset until (height)) {
-            _array2d[y] = anyStoneRows[y - offset]
+        for (i in offset until (height)) {
+            array2d[i] = anyStoneRows[i - offset]
         }
     }
 
     override fun toString(): String {
-        return _array2d.joinToString("\n") { row ->
+        return array2d.joinToString("\n") { row ->
             "%s".format(outputString(row))
         }
     }

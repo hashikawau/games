@@ -8,14 +8,14 @@ class CompositeBlock(
         public val space: TetrisField.Space,
         protected var _x: Int,
         protected var _y: Int
-) : IBlock {
+) {
     protected var _current = 0
 
     fun shape(): Array<Position> {
         return _shapes[_current]
     }
 
-    override fun positions(): Array<Position> {
+    fun positions(): Array<Position> {
         return shape().map { p -> Position(_x + p.x, _y + p.y) }.toTypedArray()
     }
 
@@ -23,11 +23,11 @@ class CompositeBlock(
         return positions().all { p -> _field.isEmpty(p.x, p.y) }
     }
 
-    override fun fixToField() {
+    fun fixToField() {
         positions().forEach { p -> _field.setCell(p.x, p.y, space) }
     }
 
-    override fun moveToRight(): Boolean {
+    fun moveToRight(): Boolean {
         if (positions().map { p -> Position(p.x + 1, p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
             ++_x
             return true
@@ -36,7 +36,7 @@ class CompositeBlock(
         }
     }
 
-    override fun moveToLeft(): Boolean {
+    fun moveToLeft(): Boolean {
         if (positions().map { p -> Position(p.x - 1, p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
             --_x
             return true
@@ -45,7 +45,7 @@ class CompositeBlock(
         }
     }
 
-    override fun moveToDown(): Boolean {
+    fun moveToDown(): Boolean {
         if (positions().map { p -> Position(p.x, p.y + 1) }.all { p -> _field.isEmpty(p.x, p.y) }) {
             ++_y
             return true
@@ -54,7 +54,7 @@ class CompositeBlock(
         }
     }
 
-    override fun rotateRight(): Boolean {
+    fun rotateRight(): Boolean {
         val next = (_current + 1) % _shapes.size
         return if (_shapes[next].map { p -> Position(_x + p.x, _y + p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
             _current = next
@@ -64,7 +64,7 @@ class CompositeBlock(
         }
     }
 
-    override fun rotateLeft(): Boolean {
+    fun rotateLeft(): Boolean {
         val next = (_current + _shapes.size - 1) % _shapes.size
         return if (_shapes[next].map { p -> Position(_x + p.x, _y + p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
             _current = next
@@ -72,5 +72,18 @@ class CompositeBlock(
         } else {
             false
         }
+    }
+}
+
+class Position(val x: Int, val y: Int) {
+    fun rotateRight(): Position {
+        return Position(y, -x)
+    }
+    fun rotateLeft(): Position {
+        return Position(-y, x)
+    }
+
+    override fun toString(): String {
+        return "P(%d,%d)".format(x, y)
     }
 }
