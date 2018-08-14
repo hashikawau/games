@@ -20,15 +20,15 @@ class CompositeBlock(
     }
 
     fun canFixToField(): Boolean {
-        return positions().all { p -> _field.isEmpty(p.x, p.y) }
+        return positions().all { p -> _field.isEmpty(p.y, p.x) }
     }
 
     fun fixToField() {
-        positions().forEach { p -> _field.setCell(p.x, p.y, space) }
+        positions().forEach { p -> _field.setCell(p.y, p.x, space) }
     }
 
     fun moveToRight(): Boolean {
-        if (positions().map { p -> Position(p.x + 1, p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
+        if (positions().map { p -> Position(p.x + 1, p.y) }.all { p -> _field.isEmpty(p.y, p.x) }) {
             ++_x
             return true
         } else {
@@ -37,7 +37,7 @@ class CompositeBlock(
     }
 
     fun moveToLeft(): Boolean {
-        if (positions().map { p -> Position(p.x - 1, p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
+        if (positions().map { p -> Position(p.x - 1, p.y) }.all { p -> _field.isEmpty(p.y, p.x) }) {
             --_x
             return true
         } else {
@@ -46,7 +46,7 @@ class CompositeBlock(
     }
 
     fun moveToDown(): Boolean {
-        if (positions().map { p -> Position(p.x, p.y + 1) }.all { p -> _field.isEmpty(p.x, p.y) }) {
+        if (positions().map { p -> Position(p.x, p.y + 1) }.all { p -> _field.isEmpty(p.y, p.x) }) {
             ++_y
             return true
         } else {
@@ -56,7 +56,7 @@ class CompositeBlock(
 
     fun rotateRight(): Boolean {
         val next = (_current + 1) % _shapes.size
-        return if (_shapes[next].map { p -> Position(_x + p.x, _y + p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
+        return if (_shapes[next].map { p -> Position(_x + p.x, _y + p.y) }.all { p -> _field.isEmpty(p.y, p.x) }) {
             _current = next
             true
         } else {
@@ -66,7 +66,7 @@ class CompositeBlock(
 
     fun rotateLeft(): Boolean {
         val next = (_current + _shapes.size - 1) % _shapes.size
-        return if (_shapes[next].map { p -> Position(_x + p.x, _y + p.y) }.all { p -> _field.isEmpty(p.x, p.y) }) {
+        return if (_shapes[next].map { p -> Position(_x + p.x, _y + p.y) }.all { p -> _field.isEmpty(p.y, p.x) }) {
             _current = next
             true
         } else {

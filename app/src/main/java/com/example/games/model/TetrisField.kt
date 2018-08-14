@@ -19,26 +19,34 @@ class TetrisField(
         HOOK_CENTER()
     }
 
-    val array2d: Array<Array<Space>> = Array(height) { Array(width) { Space.EMPTY } }
+    private val _array2d: Array<Array<Space>> = Array(height) { Array(width) { Space.EMPTY } }
 
-    private fun isInRange(j: Int, i: Int): Boolean {
-        if (j < 0 || j >= width) {
+    fun space(i: Int, j: Int): Space {
+        return _array2d[i][j]
+    }
+
+    fun isGameOver(): Boolean {
+        return _array2d[0].any { space -> space != TetrisField.Space.EMPTY }
+    }
+
+    private fun isInRange(i: Int, j: Int): Boolean {
+        if (i < 0 || i >= height) {
             return false
         }
-        if (i < 0 || i >= height) {
+        if (j < 0 || j >= width) {
             return false
         }
         return true
     }
 
-    fun setCell(j: Int, i: Int, space: Space) {
-        if (isInRange(j, i))
-            array2d[i][j] = space
+    fun setCell(i: Int, j: Int, space: Space) {
+        if (isInRange(i, j))
+            _array2d[i][j] = space
     }
 
-    fun isEmpty(j: Int, i: Int): Boolean {
-        return if (isInRange(j, i))
-            array2d[i][j] == Space.EMPTY
+    fun isEmpty(i: Int, j: Int): Boolean {
+        return if (isInRange(i, j))
+            _array2d[i][j] == Space.EMPTY
         else
             false
     }
@@ -58,14 +66,14 @@ class TetrisField(
     }
 
     fun erasedLines(): List<Int> {
-        return array2d
+        return _array2d
                 .mapIndexed({ index, row -> Pair(index, row.all { space -> space != Space.EMPTY }) })
                 .filter { tup -> tup.second }
                 .map { tup -> tup.first }
     }
 
     fun erase() {
-        val anyStoneRows: List<Array<Space>> = array2d.filter { row -> row.any { space -> space == Space.EMPTY } }
+        val anyStoneRows: List<Array<Space>> = _array2d.filter { row -> row.any { space -> space == Space.EMPTY } }
         rearrangeNoStoneRows(anyStoneRows)
         rearrangeAnyStoneRows(anyStoneRows)
     }
@@ -73,19 +81,19 @@ class TetrisField(
     private fun rearrangeNoStoneRows(anyStoneRows: List<Array<Space>>) {
         val offset = height - anyStoneRows.size
         for (i in 0 until (offset)) {
-            array2d[i] = Array(width) { Space.EMPTY }
+            _array2d[i] = Array(width) { Space.EMPTY }
         }
     }
 
     private fun rearrangeAnyStoneRows(anyStoneRows: List<Array<Space>>) {
         val offset = height - anyStoneRows.size
         for (i in offset until (height)) {
-            array2d[i] = anyStoneRows[i - offset]
+            _array2d[i] = anyStoneRows[i - offset]
         }
     }
 
     override fun toString(): String {
-        return array2d.joinToString("\n") { row ->
+        return _array2d.joinToString("\n") { row ->
             "%s".format(outputString(row))
         }
     }

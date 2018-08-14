@@ -263,7 +263,7 @@ class TetrisActivity : AppCompatActivity() {
         runOnUiThread {
             for (y in 0 until _tetrisField.height)
                 for (x in 0 until _tetrisField.width)
-                    _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.array2d[y][x]))
+                    _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.space(y,x)))
 
             for (p in _currentBlock?.positions() ?: arrayOf())
                 _spaces[p.y][p.x].setBackgroundColor(colorOf(_currentBlock?.space))
@@ -327,7 +327,7 @@ class TetrisActivity : AppCompatActivity() {
                         _spaces[y][x].setBackgroundColor(Color.WHITE)
                 } else {
                     for (x in 0 until _tetrisField.width)
-                        _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.array2d[y][x]))
+                        _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.space(y, x)))
                 }
             }
         }
@@ -347,7 +347,8 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun isGameOver(): Boolean {
-        return _tetrisField.array2d[0].any { space -> space != TetrisField.Space.EMPTY }
+//        return _tetrisField.array2d[0].any { space -> space != TetrisField.Space.EMPTY }
+        return _tetrisField.isGameOver()
     }
 
     private fun showGameOver() {
