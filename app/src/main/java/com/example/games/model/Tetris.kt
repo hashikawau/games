@@ -4,8 +4,8 @@ import com.example.games.model.blocks.*
 import java.util.*
 
 class Field(
-        private val _width: Int,
-        private val _height: Int,
+        val width: Int,
+        val height: Int,
         private val _random: Random = Random(0)
 ) {
     enum class Space(val state: Int) {
@@ -19,16 +19,16 @@ class Field(
         HOOK_CENTER(7)
     }
 
-    private val _array2d: Array<Array<Space>> = Array(_height) { Array(_width) { Space.EMPTY } }
+    private val _array2d: Array<Array<Space>> = Array(height) { Array(width) { Space.EMPTY } }
 
     val array2d
         get() = _array2d
 
     private fun isInRange(x: Int, y: Int): Boolean {
-        if (x < 0 || x >= _width) {
+        if (x < 0 || x >= width) {
             return false
         }
-        if (y < 0 || y >= _height) {
+        if (y < 0 || y >= height) {
             return false
         }
         return true
@@ -47,13 +47,13 @@ class Field(
     }
 
     private val _blocks = arrayOf(
-            { makeRectangleBlock(this, _width / 2 - 2, -1) },
-            { makeStraightBlock(this, _width / 2 - 2, 0) },
-            { makeGapLeftBlock(this, _width / 2 - 2, 0) },
-            { makeGapRightBlock(this, _width / 2 - 2, 0) },
-            { makeHookLeftBlock(this, _width / 2 - 2, 0) },
-            { makeHookRightBlock(this, _width / 2 - 2, 0) },
-            { makeHookCenterBlock(this, _width / 2 - 2, 0) }
+            { makeRectangleBlock(this, width / 2 - 2, -1) },
+            { makeStraightBlock(this, width / 2 - 2, 0) },
+            { makeGapLeftBlock(this, width / 2 - 2, 0) },
+            { makeGapRightBlock(this, width / 2 - 2, 0) },
+            { makeHookLeftBlock(this, width / 2 - 2, 0) },
+            { makeHookRightBlock(this, width / 2 - 2, 0) },
+            { makeHookCenterBlock(this, width / 2 - 2, 0) }
     )
 
     fun newBlock(): CompositeBlock {
@@ -74,15 +74,15 @@ class Field(
     }
 
     private fun rearrangeNoStoneRows(anyStoneRows: List<Array<Space>>) {
-        val offset = _height - anyStoneRows.size
+        val offset = height - anyStoneRows.size
         for (y in 0 until (offset)) {
-            _array2d[y] = Array(_width) { Space.EMPTY }
+            _array2d[y] = Array(width) { Space.EMPTY }
         }
     }
 
     private fun rearrangeAnyStoneRows(anyStoneRows: List<Array<Space>>) {
-        val offset = _height - anyStoneRows.size
-        for (y in offset until (_height)) {
+        val offset = height - anyStoneRows.size
+        for (y in offset until (height)) {
             _array2d[y] = anyStoneRows[y - offset]
         }
     }

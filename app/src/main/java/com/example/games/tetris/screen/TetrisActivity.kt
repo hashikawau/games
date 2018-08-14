@@ -24,12 +24,14 @@ class TetrisActivity : AppCompatActivity() {
         val TETRIS_ARGUMENTS_SPEED = "tetris_arguments_speed"
         val TETRIS_RESULT_ERASED_LINES = "tetris_result_erased_lines"
         val TETRIS_RESULT_SCORE = "tetris_result_score"
+
+        private val WIDTH = 10
+        private val HEIGHT = 18
     }
 
-    private val _numX = 10
-    private val _numY = 18
     private var _speed = 0.0 // [0.0 ~ 1.0]
-    private val _tetrisField = Field(_numX, _numY, Random(Date().time))
+    private val _tetrisField = Field(WIDTH, HEIGHT, Random(Date().time))
+    
     private var _currentBlock: CompositeBlock? = null
     private var _nextBlock: CompositeBlock? = null
     private var _spaces = Array(0) { Array(0) { View(null) } }
@@ -74,17 +76,17 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun initLayoutTetrisField() {
-        _spaces = Array(_numY) { Array(_numX) { View(this) } }
+        _spaces = Array(_tetrisField.height) { Array(_tetrisField.width) { View(this) } }
 
         val displaySize = Point()
         windowManager.defaultDisplay.getSize(displaySize)
-        _blockSize = 1;//Math.min(displaySize.x / _numX, (displaySize.y - HEIGHT_OF_TITLE_BAR) / _numY)
+        _blockSize = 1;//Math.min(displaySize.x / WIDTH, (displaySize.y - HEIGHT_OF_TITLE_BAR) / HEIGHT)
 
         val tableLayout = findViewById<TableLayout>(R.id.tableLayout)
-        for (y in 0 until _numY) {
+        for (y in 0 until _tetrisField.height) {
             val tableRow = TableRow(this)
             tableRow.layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
-            for (x in 0 until _numX) {
+            for (x in 0 until _tetrisField.width) {
                 _spaces!![y][x].layoutParams = TableRow.LayoutParams(_blockSize, _blockSize)
                 tableRow.addView(_spaces!![y][x])
             }
@@ -97,9 +99,9 @@ class TetrisActivity : AppCompatActivity() {
                 layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 val width = layout.measuredWidth;
                 val height = layout.measuredHeight;
-                _blockSize = Math.min(width / _numX, height / _numY)
-                for (y in 0 until _numY)
-                    for (x in 0 until _numX)
+                _blockSize = Math.min(width / _tetrisField.width, height / _tetrisField.height)
+                for (y in 0 until _tetrisField.height)
+                    for (x in 0 until _tetrisField.width)
                         _spaces[y][x].layoutParams = TableRow.LayoutParams(_blockSize, _blockSize);
             }
         })
@@ -263,8 +265,8 @@ class TetrisActivity : AppCompatActivity() {
 
     private fun drawBlocks() {
         runOnUiThread {
-            for (y in 0 until _numY)
-                for (x in 0 until _numX)
+            for (y in 0 until _tetrisField.height)
+                for (x in 0 until _tetrisField.width)
                     _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.array2d[y][x]))
 
             for (p in _currentBlock?.positions() ?: arrayOf())
@@ -323,12 +325,12 @@ class TetrisActivity : AppCompatActivity() {
         Thread.sleep(SLEEP_TIME_FOR_ERASE)
 
         runOnUiThread {
-            for (y in 0 until _numY) {
+            for (y in 0 until _tetrisField.height) {
                 if (erased.contains(y)) {
-                    for (x in 0 until _numX)
+                    for (x in 0 until _tetrisField.width)
                         _spaces[y][x].setBackgroundColor(Color.WHITE)
                 } else {
-                    for (x in 0 until _numX)
+                    for (x in 0 until _tetrisField.width)
                         _spaces[y][x].setBackgroundColor(colorOf(_tetrisField.array2d[y][x]))
                 }
             }
@@ -353,10 +355,10 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun showGameOver() {
-        for (y in _numY - 1 downTo 0) {
+        for (y in _tetrisField.height - 1 downTo 0) {
             Thread.sleep(25)
             runOnUiThread {
-                for (x in 0 until _numX)
+                for (x in 0 until _tetrisField.width)
                     _spaces!![y][x].setBackgroundColor(Color.GRAY)
             }
         }
