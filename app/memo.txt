@@ -1,8 +1,4 @@
 
 [todo tetris]
-    animation when game over
-    screen of game over
-    screen of pause
-    animation when erase lines
     play sounds
 

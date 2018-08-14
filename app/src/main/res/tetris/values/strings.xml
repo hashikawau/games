@@ -8,4 +8,7 @@
     <string name="textView_label_score">SCORE</string>
     <string name="textView_label_erased_lines">LINES</string>
     <string name="start">START</string>
+    <string name="textView_scores">LAST GAME SCORE</string>
+    <string name="textView_label_speed">SPEED</string>
+    <string name="textView_play_setting">PLAY SETTINGS</string>
 </resources>

@@ -16,15 +16,19 @@ import com.example.games.R
 import com.example.games.model.Field
 import com.example.games.model.blocks.CompositeBlock
 import java.util.*
+import kotlin.math.roundToInt
 
 
 class TetrisActivity : AppCompatActivity() {
-    val TETRIS_RESULT_ERASED_LINES = "tetris_result_erased_lines"
-    val TETRIS_RESULT_SCORE = "tetris_result_score"
+    companion object {
+        val TETRIS_ARGUMENTS_SPEED = "tetris_arguments_speed"
+        val TETRIS_RESULT_ERASED_LINES = "tetris_result_erased_lines"
+        val TETRIS_RESULT_SCORE = "tetris_result_score"
+    }
 
     private val _numX = 10
     private val _numY = 18
-    private val _timeSpan = 1000L
+    private var _speed = 0.0 // [0.0 ~ 1.0]
     private val _tetrisField = Field(_numX, _numY, Random(Date().time))
     private var _currentBlock: CompositeBlock? = null
     private var _nextBlock: CompositeBlock? = null
@@ -40,8 +44,8 @@ class TetrisActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        supportActionBar?.hide();
+
+        _speed = intent.getDoubleExtra(TETRIS_ARGUMENTS_SPEED, 0.0)
 
         setContentView(R.layout.activity_tetris)
 
@@ -50,10 +54,8 @@ class TetrisActivity : AppCompatActivity() {
 
         _gestureDetector = GestureDetector(this, _onGestureListener)
 
-
         _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
         _nextBlock = _tetrisField.newBlock()
-
 
         findViewById<TextView>(R.id.textView_value_erased_lines).setText(_erasedLines.toString())
         findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
@@ -142,16 +144,23 @@ class TetrisActivity : AppCompatActivity() {
                     override fun run() {
                         update()
                     }
-                }, 0, 100)
+                }, 0, 50)
 
         //
+        val timeSpan = toTimeSpan(_speed)
         _downingTimer = Timer()
         _downingTimer!!.schedule(
                 object : TimerTask() {
                     override fun run() {
                         down()
                     }
-                }, _timeSpan, _timeSpan)
+                }, timeSpan, timeSpan)
+    }
+
+    private fun toTimeSpan(speed: Double): Long {
+        val max = 1500
+        val min = 500
+        return (max - (max - min) * speed).toLong()
     }
 
     private fun pauseTimer() {
@@ -280,18 +289,18 @@ class TetrisActivity : AppCompatActivity() {
                 showGameOver()
                 Thread.sleep(500)
 
-                val intent = Intent()
-                intent.putExtra(TETRIS_RESULT_ERASED_LINES, _erasedLines)
-                intent.putExtra(TETRIS_RESULT_SCORE, _score)
-                setResult(RESULT_OK, intent);
+                val data = Intent()
+                data.putExtra(TETRIS_RESULT_ERASED_LINES, _erasedLines)
+                data.putExtra(TETRIS_RESULT_SCORE, _score)
+                setResult(RESULT_OK, data);
                 finish()
             }
         }
     }
 
-    private val SCORE_TABLE = intArrayOf(1, 10, 100, 1000, 10000)
+    private val SCORE_TABLE = intArrayOf(0, 10, 100, 1000, 10000)
     private fun calculateScore(erasedLines: Int): Int {
-        return SCORE_TABLE[erasedLines]
+        return (SCORE_TABLE[erasedLines] * (0.5 + 0.5 * _speed)).roundToInt()
     }
 
     private fun colorOf(blockType: Field.Space?): Int {
@@ -322,10 +331,12 @@ class TetrisActivity : AppCompatActivity() {
     }
 
     private fun showGameOver() {
-        runOnUiThread {
-            for (y in 0 until _numY)
+        for (y in _numY - 1 downTo 0) {
+            Thread.sleep(25)
+            runOnUiThread {
                 for (x in 0 until _numX)
                     _spaces!![y][x].setBackgroundColor(Color.GRAY)
+            }
         }
 
         _drawingTimer!!.cancel()
