@@ -2,6 +2,7 @@ package com.example.games.tetris.screen
 
 import android.content.Intent
 import android.graphics.Color
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -83,6 +84,7 @@ class TetrisActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         resumeTimer()
+        setVolumeControlStream(AudioManager.STREAM_MUSIC)
     }
 
     override fun onPause() {
@@ -145,11 +147,7 @@ class TetrisActivity : AppCompatActivity() {
                         }
 
                         if (isGameOver()) {
-                            if (gameoverSound?.isPlaying ?: false) {
-                                gameoverSound?.pause()
-                                gameoverSound?.seekTo(0)
-                            }
-                            gameoverSound?.start()
+                            playSoundEffect(gameoverSound)
 
                             showGameOver()
                             Thread.sleep(500)
@@ -196,24 +194,14 @@ class TetrisActivity : AppCompatActivity() {
                 return false
 
             if (didFlickToLeft(event1, event2, velocityX, velocityY)) {
-                if (_currentBlock!!.moveToLeft()) {
-                    if (slideSound?.isPlaying ?: false) {
-                        slideSound?.pause()
-                        slideSound?.seekTo(0)
-                    }
-                    slideSound?.start()
-                }
+                if (_currentBlock!!.moveToLeft())
+                    playSoundEffect(slideSound)
                 return true;
             }
 
             if (didFlickToRight(event1, event2, velocityX, velocityY)) {
-                if (_currentBlock!!.moveToRight()) {
-                    if (slideSound?.isPlaying ?: false) {
-                        slideSound?.pause()
-                        slideSound?.seekTo(0)
-                    }
-                    slideSound?.start()
-                }
+                if (_currentBlock!!.moveToRight())
+                    playSoundEffect(slideSound)
                 return true;
             }
 
@@ -246,13 +234,8 @@ class TetrisActivity : AppCompatActivity() {
         }
 
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
-            if (_currentBlock?.rotateRight() ?: false) {
-                if (transformSound?.isPlaying ?: false) {
-                    transformSound?.pause()
-                    transformSound?.seekTo(0)
-                }
-                transformSound?.start()
-            }
+            if (_currentBlock?.rotateRight() ?: false)
+                playSoundEffect(transformSound)
 //            _currentBlock?.rotateLeft()
             return true
         }
@@ -301,11 +284,7 @@ class TetrisActivity : AppCompatActivity() {
         if (_currentBlock?.moveToDown() ?: true)
             return
 
-        if (falldownSound?.isPlaying ?: false) {
-            falldownSound?.pause()
-            falldownSound?.seekTo(0)
-        }
-        falldownSound?.start()
+        playSoundEffect(falldownSound)
 
         _currentBlock?.fixToField()
         _currentBlock = null
@@ -324,11 +303,7 @@ class TetrisActivity : AppCompatActivity() {
     private fun eraseLines() {
         val erased = _tetrisField.erasedLines()
 
-        if (eraseSound?.isPlaying ?: false) {
-            eraseSound?.pause()
-            eraseSound?.seekTo(0)
-        }
-        eraseSound?.start()
+        playSoundEffect(eraseSound)
 
         Thread.sleep(SLEEP_TIME_FOR_ERASE)
 
@@ -371,6 +346,16 @@ class TetrisActivity : AppCompatActivity() {
         }
 
         _drawingTimer!!.cancel()
+    }
+
+    private fun playSoundEffect(sound: MediaPlayer?) {
+        if (sound == null)
+            return
+        if (sound.isPlaying ?: false) {
+            sound.pause()
+            sound.seekTo(0)
+        }
+        sound.start()
     }
 
 }
