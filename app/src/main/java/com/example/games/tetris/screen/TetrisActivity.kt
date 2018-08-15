@@ -236,7 +236,12 @@ class TetrisActivity : AppCompatActivity() {
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
             if (_currentBlock?.rotateRight() ?: false)
                 playSoundEffect(transformSound)
-//            _currentBlock?.rotateLeft()
+            return true
+        }
+
+        override fun onDoubleTap(e: MotionEvent?): Boolean {
+            if (_currentBlock?.rotateRight() ?: false)
+                playSoundEffect(transformSound)
             return true
         }
     }
