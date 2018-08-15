@@ -20,7 +20,7 @@ import kotlin.math.roundToInt
 
 class TetrisActivity : AppCompatActivity() {
     companion object {
-        val TETRIS_ARGUMENTS_SPEED = "tetris_arguments_speed"
+        val TETRIS_ARGUMENTS_DROP_SPEED = "tetris_arguments_drop_speed"
         val TETRIS_RESULT_ERASED_LINES = "tetris_result_erased_lines"
         val TETRIS_RESULT_SCORE = "tetris_result_score"
 
@@ -34,7 +34,7 @@ class TetrisActivity : AppCompatActivity() {
     private var _currentBlock: CompositeBlock? = null
     private var _nextBlock: CompositeBlock? = null
 
-    private var _speed = 0.0 // [0.0 ~ 1.0]
+    private var _dropSpeed = 0.0 // [0.0 ~ 1.0]
 
 
     private var _tetrisFieldSpaces = Array(0) { Array(0) { View(null) } }
@@ -50,7 +50,7 @@ class TetrisActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tetris)
 
-        _speed = intent.getDoubleExtra(TETRIS_ARGUMENTS_SPEED, 0.0)
+        _dropSpeed = intent.getDoubleExtra(TETRIS_ARGUMENTS_DROP_SPEED, 0.0)
         _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
         _nextBlock = _tetrisField.newBlock()
         _lastDownedTimeMillis = System.currentTimeMillis()
@@ -60,6 +60,8 @@ class TetrisActivity : AppCompatActivity() {
 
         _gestureDetector = GestureDetector(this, _onGestureListener)
 
+//        findViewById<TextView>(R.id.textView_value_drop_speed).setText((_dropSpeed * 10).toInt().toString())
+        findViewById<TextView>(R.id.textView_value_drop_speed).setText("%d [msec/drop]".format(toTimeSpan(_dropSpeed)))
         findViewById<TextView>(R.id.textView_value_erased_lines).setText(_erasedLines.toString())
         findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
     }
@@ -119,7 +121,7 @@ class TetrisActivity : AppCompatActivity() {
                             _nextBlock = _tetrisField.newBlock()
                         }
 
-                        if (System.currentTimeMillis() - _lastDownedTimeMillis > toTimeSpan(_speed))
+                        if (System.currentTimeMillis() - _lastDownedTimeMillis > toTimeSpan(_dropSpeed))
                             downBlock()
 
                         drawBlocks()
@@ -142,10 +144,10 @@ class TetrisActivity : AppCompatActivity() {
                 }, 0, 50)
     }
 
-    private fun toTimeSpan(speed: Double): Long {
-        val max = 1500
-        val min = 500
-        return (max - (max - min) * speed).toLong()
+    private fun toTimeSpan(dropSpeed: Double): Long {
+        val max = 2500.0
+        val min = 250.0
+        return (max - (max - min) * dropSpeed).toLong()
     }
 
     private fun pauseTimer() {
@@ -239,7 +241,7 @@ class TetrisActivity : AppCompatActivity() {
 
     private val SCORE_TABLE = intArrayOf(0, 10, 100, 1000, 10000)
     private fun calculateScore(erasedLines: Int): Int {
-        return (SCORE_TABLE[erasedLines] * (0.5 + 0.5 * _speed)).roundToInt()
+        return (SCORE_TABLE[erasedLines] * (0.5 + 0.5 * _dropSpeed)).roundToInt()
     }
 
     private fun colorOf(blockType: TetrisField.Space?): Int {

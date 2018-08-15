@@ -32,7 +32,7 @@ class TetrisMenuActivity : AppCompatActivity() {
             val selectedNumber = SPEED_TABLE[spinner.selectedItemPosition.toInt()].toDouble()
 
             val data = Intent(this, TetrisActivity::class.java)
-            data.putExtra(TetrisActivity.TETRIS_ARGUMENTS_SPEED, selectedNumber / SPEED_TABLE.size)
+            data.putExtra(TetrisActivity.TETRIS_ARGUMENTS_DROP_SPEED, selectedNumber / SPEED_TABLE.size)
             startActivityForResult(data, TETRIS_ACTIVITY)
         }
     }

@@ -16,9 +16,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.button_tetris).setOnClickListener { view ->
             startActivity(Intent(this, TetrisMenuActivity::class.java))
         }
-        findViewById<Button>(R.id.button_breakblocks).setOnClickListener { view ->
-            startActivity(Intent(this, BreakBlocksActivity::class.java))
-        }
+//        findViewById<Button>(R.id.button_breakblocks).setOnClickListener { view ->
+//            startActivity(Intent(this, BreakBlocksActivity::class.java))
+//        }
     }
 
 }
