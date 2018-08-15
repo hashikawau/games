@@ -2,6 +2,7 @@ package com.example.games.tetris.screen
 
 import android.content.Intent
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.GestureDetector
@@ -46,6 +47,13 @@ class TetrisActivity : AppCompatActivity() {
     private var _lastDownedTimeMillis = 0L
     private var _drawingTimer: Timer? = null
 
+
+    private var slideSound: MediaPlayer? = null
+    private var transformSound: MediaPlayer? = null
+    private var falldownSound: MediaPlayer? = null
+    private var eraseSound: MediaPlayer? = null
+    private var gameoverSound: MediaPlayer? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tetris)
@@ -64,6 +72,12 @@ class TetrisActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.textView_value_drop_speed).setText("%d [msec/drop]".format(toTimeSpan(_dropSpeed)))
         findViewById<TextView>(R.id.textView_value_erased_lines).setText(_erasedLines.toString())
         findViewById<TextView>(R.id.textView_value_score).setText(_score.toString())
+
+        slideSound = MediaPlayer.create(applicationContext, R.raw.slide)
+        transformSound = MediaPlayer.create(applicationContext, R.raw.transform)
+        falldownSound = MediaPlayer.create(applicationContext, R.raw.falldown)
+        eraseSound = MediaPlayer.create(applicationContext, R.raw.erase)
+        gameoverSound = MediaPlayer.create(applicationContext, R.raw.gameover)
     }
 
     override fun onResume() {
@@ -131,6 +145,12 @@ class TetrisActivity : AppCompatActivity() {
                         }
 
                         if (isGameOver()) {
+                            if (gameoverSound?.isPlaying ?: false) {
+                                gameoverSound?.pause()
+                                gameoverSound?.seekTo(0)
+                            }
+                            gameoverSound?.start()
+
                             showGameOver()
                             Thread.sleep(500)
 
@@ -176,12 +196,24 @@ class TetrisActivity : AppCompatActivity() {
                 return false
 
             if (didFlickToLeft(event1, event2, velocityX, velocityY)) {
-                _currentBlock!!.moveToLeft();
+                if (_currentBlock!!.moveToLeft()) {
+                    if (slideSound?.isPlaying ?: false) {
+                        slideSound?.pause()
+                        slideSound?.seekTo(0)
+                    }
+                    slideSound?.start()
+                }
                 return true;
             }
 
             if (didFlickToRight(event1, event2, velocityX, velocityY)) {
-                _currentBlock!!.moveToRight();
+                if (_currentBlock!!.moveToRight()) {
+                    if (slideSound?.isPlaying ?: false) {
+                        slideSound?.pause()
+                        slideSound?.seekTo(0)
+                    }
+                    slideSound?.start()
+                }
                 return true;
             }
 
@@ -214,7 +246,13 @@ class TetrisActivity : AppCompatActivity() {
         }
 
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
-            _currentBlock?.rotateRight()
+            if (_currentBlock?.rotateRight() ?: false) {
+                if (transformSound?.isPlaying ?: false) {
+                    transformSound?.pause()
+                    transformSound?.seekTo(0)
+                }
+                transformSound?.start()
+            }
 //            _currentBlock?.rotateLeft()
             return true
         }
@@ -263,6 +301,12 @@ class TetrisActivity : AppCompatActivity() {
         if (_currentBlock?.moveToDown() ?: true)
             return
 
+        if (falldownSound?.isPlaying ?: false) {
+            falldownSound?.pause()
+            falldownSound?.seekTo(0)
+        }
+        falldownSound?.start()
+
         _currentBlock?.fixToField()
         _currentBlock = null
     }
@@ -279,6 +323,12 @@ class TetrisActivity : AppCompatActivity() {
 
     private fun eraseLines() {
         val erased = _tetrisField.erasedLines()
+
+        if (eraseSound?.isPlaying ?: false) {
+            eraseSound?.pause()
+            eraseSound?.seekTo(0)
+        }
+        eraseSound?.start()
 
         Thread.sleep(SLEEP_TIME_FOR_ERASE)
 

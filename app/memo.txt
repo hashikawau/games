@@ -1,4 +1,13 @@
 
+[sound effects]
+https://soundeffect-lab.info/sound/button/
+
+slide.mp3    : https://soundeffect-lab.info/sound/button/mp3/cancel1.mp3
+transform.mp3: https://soundeffect-lab.info/sound/button/mp3/decision19.mp3
+falldown.mp3 : https://soundeffect-lab.info/sound/button/mp3/cursor9.mp3
+erase.mp3    : https://soundeffect-lab.info/sound/button/mp3/decision14.mp3
+gameover.mp3 : https://soundeffect-lab.info/sound/button/mp3/menu2.mp3
+
 [todo tetris]
     play sounds
 
