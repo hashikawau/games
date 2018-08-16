@@ -21,17 +21,26 @@ class TetrisMenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tetris_menu)
 
-        val spinner = findViewById<Spinner>(R.id.spinner_value_speed)
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item)
+        val dropSpeedSpinner = findViewById<Spinner>(R.id.spinner_value_speed)
+        val dropSpeedAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item)
         for (speed in SPEED_TABLE)
-            adapter.add(speed.toString())
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+            dropSpeedAdapter.add(speed.toString())
+        dropSpeedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        dropSpeedSpinner.adapter = dropSpeedAdapter
+
+        val guideTypeSpinner = findViewById<Spinner>(R.id.spinner_value_guide_type)
+        val guideTypeAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item)
+        for (speed in arrayOf("NONE", "GRID", "PHANTOM"))
+            guideTypeAdapter.add(speed.toString())
+        guideTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        guideTypeSpinner.adapter = guideTypeAdapter
 
         findViewById<Button>(R.id.button_start).setOnClickListener { view ->
-            val selectedNumber = SPEED_TABLE[spinner.selectedItemPosition.toInt()].toDouble()
+            val selectedNumber = SPEED_TABLE[dropSpeedSpinner.selectedItemPosition].toDouble()
+            val selectedGuide = guideTypeSpinner.selectedItemPosition
 
             val data = Intent(this, TetrisActivity::class.java)
+            data.putExtra(TetrisActivity.TETRIS_ARGUMENTS_GUIDE_TYPE, selectedGuide)
             data.putExtra(TetrisActivity.TETRIS_ARGUMENTS_DROP_SPEED, selectedNumber / SPEED_TABLE.size)
             startActivityForResult(data, TETRIS_ACTIVITY)
         }
