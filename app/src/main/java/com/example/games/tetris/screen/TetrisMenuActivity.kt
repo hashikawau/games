@@ -41,7 +41,7 @@ class TetrisMenuActivity : AppCompatActivity() {
 
             val data = Intent(this, TetrisActivity::class.java)
             data.putExtra(TetrisActivity.TETRIS_ARGUMENTS_GUIDE_TYPE, selectedGuide)
-            data.putExtra(TetrisActivity.TETRIS_ARGUMENTS_DROP_SPEED, selectedNumber / SPEED_TABLE.size)
+            data.putExtra(TetrisActivity.TETRIS_ARGUMENTS_DROP_SPEED, (selectedNumber - 1) / (SPEED_TABLE.size - 1))
             startActivityForResult(data, TETRIS_ACTIVITY)
         }
     }
