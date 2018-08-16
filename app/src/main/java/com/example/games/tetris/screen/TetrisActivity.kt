@@ -23,6 +23,7 @@ import kotlin.math.roundToInt
 class TetrisActivity : AppCompatActivity() {
     companion object {
         val TETRIS_ARGUMENTS_DROP_SPEED = "tetris_arguments_drop_speed"
+        val TETRIS_ARGUMENTS_GUIDE_TYPE = "tetris_arguments_guide_type"
         val TETRIS_RESULT_ERASED_LINES = "tetris_result_erased_lines"
         val TETRIS_RESULT_SCORE = "tetris_result_score"
 
@@ -37,7 +38,13 @@ class TetrisActivity : AppCompatActivity() {
     private var _nextBlock: CompositeBlock? = null
 
     private var _dropSpeed = 0.0 // [0.0 ~ 1.0]
+    private var _guideType = GuideType.NONE
 
+    enum class GuideType(val value: Int) {
+        NONE(0),
+        GRID(1),
+        PREDICT(2)
+    }
 
     private var _tetrisFieldSpaces = Array(0) { Array(0) { View(null) } }
     private var _nextBlockSpace = Array(0) { Array(0) { View(null) } }
@@ -55,11 +62,21 @@ class TetrisActivity : AppCompatActivity() {
     private var eraseSound: MediaPlayer? = null
     private var gameoverSound: MediaPlayer? = null
 
+    private fun toGuideType(value: Int): GuideType {
+        return when (value) {
+            GuideType.GRID.value -> GuideType.GRID
+            GuideType.PREDICT.value -> GuideType.PREDICT
+            else -> GuideType.NONE
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tetris)
 
         _dropSpeed = intent.getDoubleExtra(TETRIS_ARGUMENTS_DROP_SPEED, 0.0)
+        _guideType = toGuideType(intent.getIntExtra(TETRIS_ARGUMENTS_GUIDE_TYPE, GuideType.NONE.value))
+
         _currentBlock = _currentBlock ?: _nextBlock ?: _tetrisField.newBlock()
         _nextBlock = _tetrisField.newBlock()
         _lastDownedTimeMillis = System.currentTimeMillis()
@@ -107,11 +124,13 @@ class TetrisActivity : AppCompatActivity() {
         val width = spaces[0].size
 
         val tableLayout = findViewById<TableLayout>(tableLayoutId)
+        val layoutParams = TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT)
         for (y in 0 until height) {
             val tableRow = TableRow(this)
+            tableRow.setBackgroundColor(Color.LTGRAY)
             for (x in 0 until width)
                 tableRow.addView(spaces[y][x])
-            tableLayout.addView(tableRow, TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT))
+            tableLayout.addView(tableRow, layoutParams)
         }
 
         val layout = findViewById<View>(layoutContents);
@@ -119,11 +138,27 @@ class TetrisActivity : AppCompatActivity() {
             override fun onGlobalLayout() {
                 layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 val viewSize = Math.min(layout.measuredWidth / width, layout.measuredHeight / height)
+                val layoutParams = makeTableRowLayoutParams(_guideType, viewSize)
                 for (y in 0 until height)
                     for (x in 0 until width)
-                        spaces[y][x].layoutParams = TableRow.LayoutParams(viewSize, viewSize);
+                        spaces[y][x].layoutParams = layoutParams
             }
         })
+    }
+
+    private fun makeTableRowLayoutParams(guideType: GuideType, viewSize: Int): TableRow.LayoutParams {
+        return when (guideType) {
+            GuideType.GRID -> makeMarginedLayout(viewSize)
+            GuideType.PREDICT -> makeMarginedLayout(viewSize)
+            else -> TableRow.LayoutParams(viewSize, viewSize)
+        }
+    }
+
+    private fun makeMarginedLayout(viewSize: Int): TableRow.LayoutParams {
+        val marginSize = 1
+        val layoutParams = TableRow.LayoutParams(viewSize - marginSize * 2, viewSize - marginSize * 2)
+        layoutParams.setMargins(marginSize, marginSize, marginSize, marginSize)
+        return layoutParams
     }
 
     private fun resumeTimer() {

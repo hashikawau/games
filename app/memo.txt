@@ -9,5 +9,4 @@ erase.mp3    : https://soundeffect-lab.info/sound/button/mp3/decision14.mp3
 gameover.mp3 : https://soundeffect-lab.info/sound/button/mp3/menu2.mp3
 
 [todo tetris]
-    play sounds
 
