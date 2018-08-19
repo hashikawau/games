@@ -43,7 +43,7 @@ class TetrisActivity : AppCompatActivity() {
     enum class GuideType(val value: Int) {
         NONE(0),
         GRID(1),
-        PREDICT(2)
+        PHANTOM(2)
     }
 
     private var _tetrisFieldSpaces = Array(0) { Array(0) { View(null) } }
@@ -65,7 +65,7 @@ class TetrisActivity : AppCompatActivity() {
     private fun toGuideType(value: Int): GuideType {
         return when (value) {
             GuideType.GRID.value -> GuideType.GRID
-            GuideType.PREDICT.value -> GuideType.PREDICT
+            GuideType.PHANTOM.value -> GuideType.PHANTOM
             else -> GuideType.NONE
         }
     }
@@ -149,7 +149,6 @@ class TetrisActivity : AppCompatActivity() {
     private fun makeTableRowLayoutParams(guideType: GuideType, viewSize: Int): TableRow.LayoutParams {
         return when (guideType) {
             GuideType.GRID -> makeMarginedLayout(viewSize)
-            GuideType.PREDICT -> makeMarginedLayout(viewSize)
             else -> TableRow.LayoutParams(viewSize, viewSize)
         }
     }
@@ -288,6 +287,11 @@ class TetrisActivity : AppCompatActivity() {
             for (y in 0 until _tetrisField.height)
                 for (x in 0 until _tetrisField.width)
                     _tetrisFieldSpaces[y][x].setBackgroundColor(colorOf(_tetrisField.space(y, x)))
+
+            if (_guideType == GuideType.PHANTOM) {
+                for (p in _currentBlock?.phantomPositions() ?: arrayOf())
+                    _tetrisFieldSpaces[p.y][p.x].setBackgroundColor(getColor(R.color.colorPhantomBlock))
+            }
 
             for (p in _currentBlock?.positions() ?: arrayOf())
                 _tetrisFieldSpaces[p.y][p.x].setBackgroundColor(colorOf(_currentBlock?.space))

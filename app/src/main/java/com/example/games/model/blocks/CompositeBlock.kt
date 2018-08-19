@@ -19,6 +19,14 @@ class CompositeBlock(
         return shape().map { p -> Position(_x + p.x, _y + p.y) }.toTypedArray()
     }
 
+    fun phantomPositions(): Array<Position> {
+        val copy = CompositeBlock(_shapes, _field, space, _x, _y)
+        copy._current = _current
+        while (copy.moveToDown()) {
+        }
+        return copy.positions()
+    }
+
     fun canFixToField(): Boolean {
         return positions().all { p -> _field.isEmpty(p.y, p.x) }
     }
