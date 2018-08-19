@@ -1,4 +1,4 @@
-package com.example.games.model.blocks
+package com.example.games.tetris.model.blocks
 
 
 class Position(val x: Int, val y: Int) {

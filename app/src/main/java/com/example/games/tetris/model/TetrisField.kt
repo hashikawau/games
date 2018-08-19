@@ -1,6 +1,6 @@
-package com.example.games.model
+package com.example.games.tetris.model
 
-import com.example.games.model.blocks.*
+import com.example.games.tetris.model.blocks.*
 import java.util.*
 
 class TetrisField(

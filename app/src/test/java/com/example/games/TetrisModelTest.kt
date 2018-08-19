@@ -1,7 +1,7 @@
 //package com.example.games
 //
-//import com.example.games.model.blocks.makeSingleBlock
-//import com.example.games.model.TetrisField;
+//import com.example.games.tetris.model.blocks.makeSingleBlock
+//import com.example.games.tetris.model.TetrisField;
 //import org.junit.Test
 //
 //import org.junit.Assert.*

@@ -1,8 +1,8 @@
 package com.example.games
 
-import com.example.games.model.TetrisField
-import com.example.games.model.blocks.makeSingleBlock
-import com.example.games.model.blocks.makeStraightBlock
+import com.example.games.tetris.model.TetrisField
+import com.example.games.tetris.model.blocks.makeSingleBlock
+import com.example.games.tetris.model.blocks.makeStraightBlock
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

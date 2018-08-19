@@ -1,6 +1,6 @@
-package com.example.games.model.blocks
+package com.example.games.tetris.model.blocks
 
-import com.example.games.model.TetrisField
+import com.example.games.tetris.model.TetrisField
 
 class CompositeBlock(
         protected val _shapes: Array<Array<Position>>,

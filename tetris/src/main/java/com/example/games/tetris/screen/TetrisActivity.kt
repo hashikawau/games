@@ -13,7 +13,7 @@ import android.view.ViewTreeObserver
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
-import com.example.games.R
+import com.example.games.tetris.R
 import com.example.games.tetris.model.TetrisField
 import com.example.games.tetris.model.blocks.CompositeBlock
 import java.util.*
