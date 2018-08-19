@@ -1,4 +1,4 @@
-package com.example.games
+package com.example.games.tetris
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

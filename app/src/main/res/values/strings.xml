@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">games</string>
     <string name="textView_label_select_game">Select a game to play</string>
-    
+    <string name="tetris">Tetris</string>
 </resources>

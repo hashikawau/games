@@ -17,19 +17,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".tetris.screen.TetrisMenuActivity"
-            android:label="@string/tetris"
-            android:parentActivityName=".MainActivity">
-        </activity>
-        <activity
-            android:name=".tetris.screen.TetrisActivity"
-            android:label="@string/tetris"
-            android:parentActivityName=".tetris.screen.TetrisMenuActivity">
-        </activity>
-        <activity
             android:name=".breakblocks.screen.BreakBlocksActivity"
-            android:label="@string/tetris"
-            android:parentActivityName=".tetris.screen.TetrisMenuActivity">
+            android:label="@string/breakblocks"
+            android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

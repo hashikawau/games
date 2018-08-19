@@ -1,4 +1,4 @@
-package com.example.games
+package com.example.games.tetris
 
 import com.example.games.tetris.model.TetrisField
 import com.example.games.tetris.model.blocks.makeSingleBlock

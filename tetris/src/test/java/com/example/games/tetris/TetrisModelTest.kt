@@ -1,3 +1,5 @@
+package com.example.games.tetris
+
 //package com.example.games
 //
 //import com.example.games.tetris.model.blocks.makeSingleBlock
